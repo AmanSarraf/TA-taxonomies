@@ -1,0 +1,49 @@
+[project]
+name = "ta-taxonomies"
+version = "0.1.0"
+description = "Talent Angels taxonomy suites: per-taxonomy ingestion, graph schemas, crosswalks, and the suite contract."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [{ name = "The Talent Angels Authors" }]
+keywords = ["knowledge-graph", "taxonomies", "esco", "onet", "sfia", "bls", "graph-rag"]
+dependencies = [
+  # Stack per TA-workspace ADR-0005 (versions pinned as code lands).
+  "pydantic>=2",
+  "neo4j",
+  "python-dotenv",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "ruff>=0.6",
+  "mypy>=1.10",
+]
+
+[project.urls]
+Homepage = "https://github.com/LFX-Talent-Angels"
+Workspace = "https://github.com/LFX-Talent-Angels/TA-workspace"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ta_taxonomies"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.11"
+packages = ["ta_taxonomies"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
