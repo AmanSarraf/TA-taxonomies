@@ -8,7 +8,7 @@ from ta_taxonomies.suites.esco.ids import (
 )
 
 
-def test_isco_code_from_uri_preserves_leading_zeros() -> None:
+def test_isco_code_keeps_leading_zeros() -> None:
     assert isco_code_from_uri("http://data.europa.eu/esco/isco/C0110") == "0110"
     assert isco_code_from_uri("http://data.europa.eu/esco/isco/C01") == "01"
     assert isco_code_from_uri("http://data.europa.eu/esco/isco/C1") == "1"
