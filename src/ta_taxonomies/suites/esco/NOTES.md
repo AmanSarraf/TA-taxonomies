@@ -244,7 +244,7 @@ Contract tests (Neo4j must be up; they reload the **fixture**, wiping full data)
 pytest tests/suites/esco -q
 ```
 
-⚠️ `tests/suites/esco/test_load_validate.py` and `test_search_nodes.py` call
+Note: `tests/suites/esco/test_load_validate.py` and `test_search_nodes.py` call
 `run_load(mode="fixture", wipe=True)`. After tests you must **re-run full load**
 if you want the complete KG again.
 
