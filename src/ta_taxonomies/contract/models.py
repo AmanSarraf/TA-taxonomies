@@ -18,7 +18,19 @@ SuiteName = Literal["esco", "onet", "sfia", "bls"]
 
 
 class Node(BaseModel):
-    """A graph node returned by suite tools."""
+    """A graph node returned by suite tools.
+
+    Example::
+
+        Node(
+            id="esco:occupation:f2b15a0e-e65a-438a-affb-29b9d50b77d1",
+            kind="Occupation",
+            label="software developer",
+            source="esco",
+            source_id="http://data.europa.eu/esco/occupation/f2b15a0e-e65a-438a-affb-29b9d50b77d1",
+            properties={"code": "2512.4"},
+        )
+    """
 
     id: str = Field(..., description="Suite-scoped id, e.g. esco:occupation:…")
     kind: str = Field(..., description="Canonical or suite kind: Occupation, Skill, …")
@@ -29,7 +41,17 @@ class Node(BaseModel):
 
 
 class Edge(BaseModel):
-    """A graph edge returned by suite tools."""
+    """A graph edge returned by suite tools.
+
+    Example::
+
+        Edge(
+            type="HAS_SKILL",
+            from_id="esco:occupation:f2b15a0e-e65a-438a-affb-29b9d50b77d1",
+            to_id="esco:skill:fed5b267-73fa-461d-9f69-827c78beb39d",
+            properties={"relation_type": "essential"},
+        )
+    """
 
     type: str
     from_id: str
@@ -38,7 +60,22 @@ class Edge(BaseModel):
 
 
 class Candidate(BaseModel):
-    """A Locate / search_nodes hit."""
+    """A Locate / search_nodes hit (node + how it was matched).
+
+    Example::
+
+        Candidate(
+            node=Node(
+                id="esco:occupation:f2b15a0e-e65a-438a-affb-29b9d50b77d1",
+                kind="Occupation",
+                label="software developer",
+                source="esco",
+                source_id="http://data.europa.eu/esco/occupation/f2b15a0e-e65a-438a-affb-29b9d50b77d1",
+            ),
+            confidence=0.95,
+            method="exact_pref",
+        )
+    """
 
     node: Node
     confidence: float = Field(..., ge=0.0, le=1.0)
@@ -46,7 +83,21 @@ class Candidate(BaseModel):
 
 
 class ToolResult(BaseModel):
-    """Typed envelope for suite tool responses."""
+    """Typed envelope for suite tool responses.
+
+    Example (Locate / search_nodes)::
+
+        ToolResult(
+            candidates=[...],  # list[Candidate]
+            nodes=[...],       # same nodes, flat list
+            warnings=[],
+            evidence=["esco:search:exact_pref:software developer"],
+        )
+
+    Example (not found)::
+
+        ToolResult(warnings=["not_found"])
+    """
 
     nodes: list[Node] = Field(default_factory=list)
     edges: list[Edge] = Field(default_factory=list)
