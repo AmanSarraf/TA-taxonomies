@@ -23,8 +23,7 @@ CONSTRAINTS: list[str] = [
 ]
 
 INDEXES: list[str] = [
-    f"CREATE INDEX esco_{label.lower()}_pref IF NOT EXISTS "
-    f"FOR (n:{label}) ON (n.pref_label)"
+    f"CREATE INDEX esco_{label.lower()}_pref IF NOT EXISTS FOR (n:{label}) ON (n.pref_label)"
     for label in (LABEL_OCCUPATION, LABEL_SKILL, LABEL_ISCO_GROUP, LABEL_SKILL_GROUP)
 ]
 

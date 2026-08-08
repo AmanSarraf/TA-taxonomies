@@ -200,9 +200,7 @@ def normalize_fixture(doc: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
         )
         occupations.append(row)
         if isco_group and isco_group in isco_by_code:
-            classified.append(
-                {"from_id": row["id"], "to_id": isco_by_code[isco_group]}
-            )
+            classified.append({"from_id": row["id"], "to_id": isco_by_code[isco_group]})
 
     skills: list[dict[str, Any]] = []
     for s in doc.get("skills", []):
@@ -376,22 +374,16 @@ def load_normalized(
         }
         print(f"    → {counts['isco_groups']:,}", flush=True)
         print("  merging occupations …", flush=True)
-        counts["occupations"] = _merge_nodes(
-            session, LABEL_OCCUPATION, payload["occupations"]
-        )
+        counts["occupations"] = _merge_nodes(session, LABEL_OCCUPATION, payload["occupations"])
         print(f"    → {counts['occupations']:,}", flush=True)
         print("  merging skill groups …", flush=True)
-        counts["skill_groups"] = _merge_nodes(
-            session, LABEL_SKILL_GROUP, payload["skill_groups"]
-        )
+        counts["skill_groups"] = _merge_nodes(session, LABEL_SKILL_GROUP, payload["skill_groups"])
         print(f"    → {counts['skill_groups']:,}", flush=True)
         print("  merging skills …", flush=True)
         counts["skills"] = _merge_nodes(session, LABEL_SKILL, payload["skills"])
         print(f"    → {counts['skills']:,}", flush=True)
         print("  merging CLASSIFIED_UNDER …", flush=True)
-        counts["classified_under"] = _merge_classified_under(
-            session, payload["classified"]
-        )
+        counts["classified_under"] = _merge_classified_under(session, payload["classified"])
         print(f"    → {counts['classified_under']:,}", flush=True)
         print("  merging BROADER_THAN …", flush=True)
         counts["broader_than"] = _merge_broader(session, payload["broader"])
@@ -400,9 +392,7 @@ def load_normalized(
         counts["has_skill"] = _merge_has_skill(session, payload["has_skill"])
         print(f"    → {counts['has_skill']:,}", flush=True)
         print("  merging RELATED_TO …", flush=True)
-        counts["related_to"] = _merge_related_to(
-            session, payload.get("related_to") or []
-        )
+        counts["related_to"] = _merge_related_to(session, payload.get("related_to") or [])
         print(f"    → {counts['related_to']:,}", flush=True)
     return counts
 
@@ -415,6 +405,7 @@ def validate_load(
 ) -> dict[str, int]:
     """Assert load invariants; return live counts."""
     with driver.session(database=database) as session:
+
         def count_label(label: str) -> int:
             rec = session.run(f"MATCH (n:{label}) RETURN count(n) AS c").single()
             return int(rec["c"]) if rec else 0
@@ -492,9 +483,7 @@ def run_load(
     if mode == "fixture":
         doc = load_fixture_document(fixture_path)
     elif mode == "full":
-        root = data_dir or Path(
-            os.getenv("ESCO_DATA_DIR", "data/esco/raw/DATABASE")
-        )
+        root = data_dir or Path(os.getenv("ESCO_DATA_DIR", "data/esco/raw/DATABASE"))
         doc = load_full_document(root)
     else:
         raise ValueError(f"unknown mode: {mode}")

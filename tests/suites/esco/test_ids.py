@@ -21,13 +21,8 @@ def test_suite_id_from_uri() -> None:
         )
         == "esco:occupation:f2b15a0e-e65a-438a-affb-29b9d50b77d1"
     )
-    assert (
-        suite_id_from_uri("http://data.europa.eu/esco/isco/C2512") == "esco:isco:2512"
-    )
-    assert (
-        suite_id_from_uri("http://data.europa.eu/esco/isced-f/0613")
-        == "esco:isced-f:0613"
-    )
+    assert suite_id_from_uri("http://data.europa.eu/esco/isco/C2512") == "esco:isco:2512"
+    assert suite_id_from_uri("http://data.europa.eu/esco/isced-f/0613") == "esco:isced-f:0613"
 
 
 def test_code_to_str_float() -> None:

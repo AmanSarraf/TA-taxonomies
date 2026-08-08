@@ -304,9 +304,7 @@ class EscoSuite:
             rows = [dict(r) for r in result]
             if not rows:
                 # check node exists
-                exists = session.run(
-                    "MATCH (n {id: $id}) RETURN n.id AS id", id=node_id
-                ).single()
+                exists = session.run("MATCH (n {id: $id}) RETURN n.id AS id", id=node_id).single()
                 if not exists:
                     return ToolResult(warnings=["node_not_found"])
                 return ToolResult(warnings=["no_neighbors"], nodes=[])
