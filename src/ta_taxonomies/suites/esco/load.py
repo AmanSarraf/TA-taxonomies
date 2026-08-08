@@ -460,7 +460,8 @@ def validate_load(
     assert live["skills"] == expected["skills"], live
     assert live["isco_groups"] == expected["isco_groups"], live
     assert live["skill_groups"] == expected["skill_groups"], live
-    # Edge counts: live graph must match what MERGE actually created.
+    # Edge counts: compare to unique endpoint pairs (MERGE is idempotent; batch
+    # RETURN count(*) can over-count when the same pair appears more than once).
     assert live["has_skill"] == expected["has_skill"], live
     assert live["broader_than"] == expected["broader_than"], live
     assert live["classified_under"] == expected["classified_under"], live
@@ -471,6 +472,14 @@ def validate_load(
     if live["occupations"] > 100:
         assert orphan_occ_n == 0, f"occupations with no HAS_SKILL: {orphan_occ_n}"
     return live
+
+
+def _dedupe_edges(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Keep one row per (from_id, to_id); last row wins for properties."""
+    seen: dict[tuple[str, str], dict[str, Any]] = {}
+    for row in rows:
+        seen[(row["from_id"], row["to_id"])] = row
+    return list(seen.values())
 
 
 def run_load(
@@ -496,6 +505,11 @@ def run_load(
         for row in payload[key]:
             seen[row["id"]] = row
         payload[key] = list(seen.values())
+    # unique edge pairs so MERGE batch counts match live relationship counts
+    payload["has_skill"] = _dedupe_edges(payload["has_skill"])
+    payload["broader"] = _dedupe_edges(payload["broader"])
+    payload["classified"] = _dedupe_edges(payload["classified"])
+    payload["related_to"] = _dedupe_edges(payload.get("related_to") or [])
     print(
         f"  unique occupations={len(payload['occupations']):,} "
         f"skills={len(payload['skills']):,} "
@@ -503,7 +517,8 @@ def run_load(
         f"skill_groups={len(payload['skill_groups']):,} "
         f"has_skill_rows={len(payload['has_skill']):,} "
         f"broader_rows={len(payload['broader']):,} "
-        f"related_rows={len(payload.get('related_to') or []):,}",
+        f"classified_rows={len(payload['classified']):,} "
+        f"related_rows={len(payload['related_to']):,}",
         flush=True,
     )
 
@@ -511,8 +526,19 @@ def run_load(
         verify_connectivity(driver)
         print("Connected to Neo4j. Loading …", flush=True)
         counts = load_normalized(driver, payload, database=database, wipe=wipe)
+        # Expected edge counts = unique pairs we attempted (not raw MERGE row hits)
+        expected = {
+            "occupations": counts["occupations"],
+            "skills": counts["skills"],
+            "isco_groups": counts["isco_groups"],
+            "skill_groups": counts["skill_groups"],
+            "has_skill": len(payload["has_skill"]),
+            "broader_than": len(payload["broader"]),
+            "classified_under": len(payload["classified"]),
+            "related_to": len(payload["related_to"]),
+        }
         print("Validating …", flush=True)
-        live = validate_load(driver, counts, database=database)
+        live = validate_load(driver, expected, database=database)
     return live
 
 
