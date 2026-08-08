@@ -1,11 +1,11 @@
 """Fixture normalize path without Neo4j."""
 
-from ta_taxonomies.suites.esco.load import load_fixture_document, normalize_fixture
+from ta_taxonomies.suites.esco.load import load_fixture_document, normalize_document
 
 
 def test_fixture_normalize_shapes() -> None:
     doc = load_fixture_document()
-    payload = normalize_fixture(doc)
+    payload = normalize_document(doc)
 
     assert len(payload["occupations"]) >= 4
     assert len(payload["skills"]) >= 10

@@ -164,8 +164,8 @@ def _node_row(
     }
 
 
-def normalize_fixture(doc: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
-    """Translate fixture document → batched MERGE payloads."""
+def normalize_document(doc: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
+    """Translate an ESCO document (fixture JSON or full xlsx-shaped dict) into MERGE payloads."""
     occupations: list[dict[str, Any]] = []
     classified: list[dict[str, Any]] = []
     isco_by_code: dict[str, str] = {}
@@ -498,7 +498,7 @@ def run_load(
         raise ValueError(f"unknown mode: {mode}")
 
     print(f"Normalizing ({mode}) …", flush=True)
-    payload = normalize_fixture(doc)
+    payload = normalize_document(doc)
     # unique by id (source dumps have a few duplicate URIs)
     for key in ("occupations", "skills", "isco_groups", "skill_groups"):
         seen: dict[str, dict[str, Any]] = {}
