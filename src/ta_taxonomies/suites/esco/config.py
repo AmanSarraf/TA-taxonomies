@@ -28,7 +28,7 @@ REL_CLASSIFIED_UNDER = "CLASSIFIED_UNDER"
 # skill ↔ skill (essential/optional in source)
 REL_RELATED_TO = "RELATED_TO"
 
-TRAVERSABLE_RELS: frozenset[str] = frozenset(
+TRAVERSABLE_RELS = frozenset(
     {
         REL_HAS_SKILL,
         REL_BROADER_THAN,
@@ -38,7 +38,7 @@ TRAVERSABLE_RELS: frozenset[str] = frozenset(
 )
 
 # kind filter values accepted by search_nodes
-KIND_ALIASES: dict[str, str] = {
+KIND_ALIASES = {
     "occupation": LABEL_OCCUPATION,
     "occupations": LABEL_OCCUPATION,
     "skill": LABEL_SKILL,

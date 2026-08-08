@@ -20,7 +20,7 @@ from ta_taxonomies.suites.esco.config import (
 )
 
 # Constraints: uniqueness on suite-scoped id (and uri for provenance joins)
-CONSTRAINTS: list[str] = [
+CONSTRAINTS = [
     f"CREATE CONSTRAINT esco_{label.lower()}_id IF NOT EXISTS "
     f"FOR (n:{label}) REQUIRE n.id IS UNIQUE"
     for label in (LABEL_OCCUPATION, LABEL_SKILL, LABEL_ISCO_GROUP, LABEL_SKILL_GROUP)
@@ -30,7 +30,7 @@ CONSTRAINTS: list[str] = [
     for label in (LABEL_OCCUPATION, LABEL_SKILL, LABEL_ISCO_GROUP, LABEL_SKILL_GROUP)
 ]
 
-INDEXES: list[str] = [
+INDEXES = [
     f"CREATE INDEX esco_{label.lower()}_pref IF NOT EXISTS FOR (n:{label}) ON (n.pref_label)"
     for label in (LABEL_OCCUPATION, LABEL_SKILL, LABEL_ISCO_GROUP, LABEL_SKILL_GROUP)
 ]
