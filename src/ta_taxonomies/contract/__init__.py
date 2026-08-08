@@ -7,5 +7,21 @@
 
 This package is the ONLY surface TA-agents may import. Typed I/O (Pydantic
 v2); node IDs are suite-scoped; every node carries source + source_id;
-evidence is a pointer, not a payload. Skeleton.
+evidence is a pointer, not a payload.
 """
+
+from ta_taxonomies.contract.models import (
+    Candidate,
+    Edge,
+    Node,
+    ToolResult,
+)
+from ta_taxonomies.contract.protocols import Suite
+
+__all__ = [
+    "Candidate",
+    "Edge",
+    "Node",
+    "Suite",
+    "ToolResult",
+]
