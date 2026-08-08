@@ -496,6 +496,14 @@ def run_load(
     fixture_path: Path | None = None,
     wipe: bool = True,
 ) -> dict[str, int]:
+    """Load ESCO into Neo4j and return live node/relationship counts.
+
+    mode:
+        ``fixture`` — committed ICT subset (tests/CI).
+        ``full`` — English DATABASE xlsx under ``data_dir`` or ``ESCO_DATA_DIR``.
+    wipe:
+        If True (default), detach-delete existing ESCO labels before load.
+    """
     if mode == "fixture":
         doc = load_fixture_document(fixture_path)
     elif mode == "full":

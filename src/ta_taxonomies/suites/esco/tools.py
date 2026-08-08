@@ -5,10 +5,10 @@ TA-agents) use ``EscoSuite`` for Locate/Connect/Pathfind-style operations —
 ``search_nodes``, ``get_neighbors``, ``enumerate_paths``. Returns contract
 ``ToolResult`` models, not raw Neo4j records.
 
-Why it exists: push deterministic graph work into a library so agents do not
-reimplement Cypher. Not LangGraph ``@tool`` registration — that stays in
-TA-agents. ``score_paths`` is intentionally unimplemented: ESCO occ↔skill
-edges are essential/optional only unless a named TA scoring policy is added.
+Why it exists: keep Cypher and confidence policy in a library so agents do
+not reimplement graph access. LangGraph ``@tool`` wiring stays in TA-agents.
+``score_paths`` is a deliberate stub until a named TA scoring policy exists
+(ESCO occ–skill links are essential/optional only, not numeric weights).
 """
 
 from __future__ import annotations
@@ -87,7 +87,11 @@ def _fetch_by_ids(session: Session, ids: list[str]) -> dict[str, Node]:
 
 
 class EscoSuite:
-    """ESCO implementation of the suite contract."""
+    """ESCO implementation of the suite contract (read path against Neo4j).
+
+    Construct with a neo4j ``Driver`` from ``db.neo4j_driver`` (Docker or Aura).
+    Call after the graph has been loaded; does not ingest xlsx/fixture data.
+    """
 
     name = SOURCE
 
@@ -99,6 +103,12 @@ class EscoSuite:
         return self._driver.session(database=self._database)
 
     def search_nodes(self, text: str, kind: str | None = None) -> ToolResult:
+        """Locate: resolve free text to ESCO nodes with confidence.
+
+        Order: exact preferred label → exact alt label → case-insensitive
+        preferred → substring on pref/alts. Never invents hits (``not_found``).
+        ``kind`` optionally restricts labels (see ``KIND_ALIASES`` in config).
+        """
         q = (text or "").strip()
         if not q:
             return ToolResult(warnings=["empty_query"])

@@ -1,15 +1,12 @@
-"""Suite contract package — public types and protocol for all taxonomies.
+"""Public suite contract for TA-agents: models + Suite protocol.
 
-Use case: the boundary between TA-taxonomies and TA-agents. Agents should
-import from here (models + Suite protocol), not from suite loaders or Neo4j
-helpers.
+Use case: import Node, ToolResult, Suite, etc. from here — the boundary
+between TA-taxonomies and the agent runtime. Do not import suite loaders or
+Neo4j helpers into agents.
 
-Tool surface every suite implements::
+Tool methods (see also ``protocols.Suite``)::
 
-    search_nodes(text, kind?)                -> candidates + confidence
-    get_neighbors(node_id, rel_types?)       -> nodes + edges
-    enumerate_paths(from_id, to_id, limits)  -> depth-capped, cycle-free paths
-    score_paths(paths, policy)               -> ranked under a named policy
+    search_nodes · get_neighbors · enumerate_paths · score_paths
 
 Rules: suite-scoped ids; source + source_id on nodes; evidence is a pointer,
 not a licensed payload.
