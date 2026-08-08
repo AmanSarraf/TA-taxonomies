@@ -28,9 +28,18 @@ def neo4j_config_from_env() -> dict[str, str]:
     return {"uri": uri, "user": user, "password": password, "database": database}
 
 
+# @contextmanager: enables `with neo4j_driver() as (driver, db):` and always
+# runs driver.close() in the finally block (even if the body raises).
 @contextmanager
 def neo4j_driver() -> Iterator[tuple[Driver, str]]:
-    """Yield (driver, database) from env and close on exit."""
+    """Open a Neo4j driver from env; close it when the ``with`` block ends.
+
+    Example::
+
+        with neo4j_driver() as (driver, database):
+            suite = EscoSuite(driver, database=database)
+            suite.search_nodes("software developer")
+    """
     cfg = neo4j_config_from_env()
     driver = GraphDatabase.driver(cfg["uri"], auth=(cfg["user"], cfg["password"]))
     try:
