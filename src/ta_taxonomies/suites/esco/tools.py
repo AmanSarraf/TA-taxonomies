@@ -1,4 +1,15 @@
-"""ESCO suite tools implementing the shared contract."""
+"""ESCO suite tools: query the loaded graph via the shared suite contract.
+
+Use case: after load.py has populated Neo4j, callers (tests, CLIs, later
+TA-agents) use ``EscoSuite`` for Locate/Connect/Pathfind-style operations —
+``search_nodes``, ``get_neighbors``, ``enumerate_paths``. Returns contract
+``ToolResult`` models, not raw Neo4j records.
+
+Why it exists: push deterministic graph work into a library so agents do not
+reimplement Cypher. Not LangGraph ``@tool`` registration — that stays in
+TA-agents. ``score_paths`` is intentionally unimplemented: ESCO occ↔skill
+edges are essential/optional only unless a named TA scoring policy is added.
+"""
 
 from __future__ import annotations
 

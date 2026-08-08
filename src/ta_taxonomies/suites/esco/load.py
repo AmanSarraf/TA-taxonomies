@@ -1,11 +1,18 @@
-"""ESCO loader: fixture (committed) and optional full DATABASE xlsx load.
+"""ESCO graph loader: build the suite knowledge graph in Neo4j.
 
-Reproducible entrypoint::
+Use case: reproducible ingestion for CI (small committed fixture) or a full
+English DATABASE dump on a developer machine / Aura. Pipeline is
+read → normalize → MERGE → validate. Does not implement Locate/Connect;
+that is tools.py after the graph exists.
+
+Entrypoint::
 
     python -m ta_taxonomies.suites.esco.load --mode fixture
     python -m ta_taxonomies.suites.esco.load --mode full
 
-Always ends with validation assertions (counts, no dangling HAS_SKILL).
+Why it exists: one path for fixture and full data (same normalize + merge),
+pointer-not-payload (dumps stay gitignored), and post-load assertions
+(counts, no dangling HAS_SKILL). Target DB is whatever NEO4J_* env points at.
 """
 
 from __future__ import annotations

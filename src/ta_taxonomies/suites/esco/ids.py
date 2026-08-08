@@ -1,4 +1,13 @@
-"""Suite-scoped identity helpers for ESCO URIs and codes."""
+"""ESCO identity helpers: concept URIs → suite-scoped ids and clean codes.
+
+Use case: during load (and anywhere we touch source rows), turn messy ESCO
+values into stable graph keys — e.g. occupation URI → ``esco:occupation:<uuid>``,
+ISCO codes as strings with leading zeros preserved from the URI.
+
+Why it exists: Excel often types codes as floats; architecture requires
+suite-scoped string ids and string codes. Also splits multi-value altLabels
+for search. Pure functions — no Neo4j access.
+"""
 
 from __future__ import annotations
 

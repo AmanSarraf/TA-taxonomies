@@ -1,4 +1,12 @@
-"""Neo4j constraints and indexes for the ESCO suite."""
+"""Neo4j schema setup for the ESCO suite (constraints and indexes).
+
+Use case: run once at the start of a load so ``id`` and ``uri`` are unique per
+label and ``pref_label`` is indexed for search. Idempotent
+(``IF NOT EXISTS``).
+
+Why it exists: protects identity under MERGE and speeds Locate-style lookups.
+Does not insert taxonomy rows — structure only, before load.py merges data.
+"""
 
 from __future__ import annotations
 

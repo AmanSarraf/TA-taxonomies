@@ -1,4 +1,12 @@
-"""ESCO suite configuration: traversable relationships and kinds."""
+"""ESCO suite constants shared by the loader and tools (no I/O).
+
+Use case: single place for Neo4j labels, relationship type names, search
+``kind`` aliases, and Locate confidence scores so load.py and tools.py never
+drift.
+
+Why it exists: renaming a label or confidence policy should be one edit.
+Import-only — works the same for Docker and Aura backends.
+"""
 
 from __future__ import annotations
 

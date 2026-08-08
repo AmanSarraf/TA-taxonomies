@@ -1,6 +1,11 @@
-"""Shared Pydantic models for the suite contract.
+"""Shared Pydantic models for the suite contract (typed tool I/O).
 
-These types are the only shapes TA-agents should depend on when calling suite tools.
+Use case: define the only data shapes TA-agents (and other callers) should
+depend on when talking to any suite — Node, Edge, Candidate, ToolResult.
+
+Why it exists: keeps Locate/Connect/Pathfind results structured (ids,
+confidence, warnings, evidence pointers) instead of free-form prose or
+Neo4j-specific types. Suites fill these models; agents consume them.
 """
 
 from __future__ import annotations

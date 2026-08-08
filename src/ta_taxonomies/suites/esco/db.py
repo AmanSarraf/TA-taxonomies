@@ -1,4 +1,13 @@
-"""Neo4j driver helpers for the ESCO suite."""
+"""Neo4j connection helpers for the ESCO suite (Docker or Aura).
+
+Use case: open a Bolt driver from environment variables (``.env`` /
+``NEO4J_URI``, user, password, database), yield it safely, and close it.
+Used by both the loader (writes) and EscoSuite tools (reads).
+
+Why it exists: backend choice is configuration only — local
+``bolt://localhost:7687`` vs Aura ``neo4j+s://…`` — without branching load or
+tool code. No ESCO business logic here.
+"""
 
 from __future__ import annotations
 
