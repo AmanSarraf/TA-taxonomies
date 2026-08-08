@@ -17,12 +17,15 @@ REL_HAS_SKILL = "HAS_SKILL"
 REL_BROADER_THAN = "BROADER_THAN"
 # (Occupation)-[:CLASSIFIED_UNDER]->(ISCOGroup)
 REL_CLASSIFIED_UNDER = "CLASSIFIED_UNDER"
+# skill ↔ skill (essential/optional in source)
+REL_RELATED_TO = "RELATED_TO"
 
 TRAVERSABLE_RELS: frozenset[str] = frozenset(
     {
         REL_HAS_SKILL,
         REL_BROADER_THAN,
         REL_CLASSIFIED_UNDER,
+        REL_RELATED_TO,
     }
 )
 

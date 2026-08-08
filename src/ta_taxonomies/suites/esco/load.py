@@ -28,6 +28,7 @@ from ta_taxonomies.suites.esco.config import (
     REL_BROADER_THAN,
     REL_CLASSIFIED_UNDER,
     REL_HAS_SKILL,
+    REL_RELATED_TO,
     SOURCE,
 )
 from ta_taxonomies.suites.esco.db import neo4j_driver, verify_connectivity
@@ -76,21 +77,28 @@ def _merge_nodes(session: Session, label: str, rows: list[dict[str, Any]]) -> in
     return total
 
 
-def _merge_has_skill(session: Session, rows: list[dict[str, Any]]) -> int:
+def _merge_rel_count(session: Session, cypher: str, rows: list[dict[str, Any]]) -> int:
+    """Run batched MERGE and sum Neo4j-reported match counts (skips missing ends)."""
     if not rows:
         return 0
+    total = 0
+    for i in range(0, len(rows), BATCH):
+        chunk = rows[i : i + BATCH]
+        rec = session.run(cypher, rows=chunk).single()
+        total += int(rec["c"]) if rec else 0
+    return total
+
+
+def _merge_has_skill(session: Session, rows: list[dict[str, Any]]) -> int:
     cypher = f"""
     UNWIND $rows AS row
     MATCH (o:{LABEL_OCCUPATION} {{id: row.from_id}})
     MATCH (s:{LABEL_SKILL} {{id: row.to_id}})
     MERGE (o)-[r:{REL_HAS_SKILL}]->(s)
     SET r.relation_type = row.relation_type
+    RETURN count(*) AS c
     """
-    total = 0
-    for i in range(0, len(rows), BATCH):
-        session.run(cypher, rows=rows[i : i + BATCH])
-        total += len(rows[i : i + BATCH])
-    return total
+    return _merge_rel_count(session, cypher, rows)
 
 
 def _merge_broader(
@@ -98,35 +106,37 @@ def _merge_broader(
     rows: list[dict[str, Any]],
 ) -> int:
     """MERGE BROADER_THAN edges. Endpoints may be different labels; match by id."""
-    if not rows:
-        return 0
     cypher = f"""
     UNWIND $rows AS row
     MATCH (a {{id: row.from_id}})
     MATCH (b {{id: row.to_id}})
     MERGE (a)-[r:{REL_BROADER_THAN}]->(b)
+    RETURN count(*) AS c
     """
-    total = 0
-    for i in range(0, len(rows), BATCH):
-        session.run(cypher, rows=rows[i : i + BATCH])
-        total += len(rows[i : i + BATCH])
-    return total
+    return _merge_rel_count(session, cypher, rows)
 
 
 def _merge_classified_under(session: Session, rows: list[dict[str, Any]]) -> int:
-    if not rows:
-        return 0
     cypher = f"""
     UNWIND $rows AS row
     MATCH (o:{LABEL_OCCUPATION} {{id: row.from_id}})
     MATCH (g:{LABEL_ISCO_GROUP} {{id: row.to_id}})
     MERGE (o)-[:{REL_CLASSIFIED_UNDER}]->(g)
+    RETURN count(*) AS c
     """
-    total = 0
-    for i in range(0, len(rows), BATCH):
-        session.run(cypher, rows=rows[i : i + BATCH])
-        total += len(rows[i : i + BATCH])
-    return total
+    return _merge_rel_count(session, cypher, rows)
+
+
+def _merge_related_to(session: Session, rows: list[dict[str, Any]]) -> int:
+    cypher = f"""
+    UNWIND $rows AS row
+    MATCH (a:{LABEL_SKILL} {{id: row.from_id}})
+    MATCH (b:{LABEL_SKILL} {{id: row.to_id}})
+    MERGE (a)-[r:{REL_RELATED_TO}]->(b)
+    SET r.relation_type = row.relation_type
+    RETURN count(*) AS c
+    """
+    return _merge_rel_count(session, cypher, rows)
 
 
 def _node_row(
@@ -249,6 +259,21 @@ def normalize_fixture(doc: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
             }
         )
 
+    related: list[dict[str, Any]] = []
+    for r in doc.get("skill_skill_relations", []):
+        # full xlsx: originalSkillUri / relatedSkillUri
+        ou = r.get("originalSkillUri") or r.get("fromUri")
+        ru = r.get("relatedSkillUri") or r.get("toUri")
+        if not ou or not ru:
+            continue
+        related.append(
+            {
+                "from_id": suite_id_from_uri(str(ou)),
+                "to_id": suite_id_from_uri(str(ru)),
+                "relation_type": str(r.get("relationType") or "optional"),
+            }
+        )
+
     return {
         "occupations": occupations,
         "skills": skills,
@@ -257,6 +282,7 @@ def normalize_fixture(doc: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
         "has_skill": has_skill,
         "broader": broader,
         "classified": classified,
+        "related_to": related,
     }
 
 
@@ -290,6 +316,9 @@ def load_full_document(data_dir: Path) -> dict[str, Any]:
         "broader_occ": "broaderRelationsOccPillar_en.xlsx",
         "broader_skill": "broaderRelationsSkillPillar_en.xlsx",
     }
+    optional = {
+        "skill_skill_relations": "skillSkillRelations_en.xlsx",
+    }
     doc: dict[str, Any] = {
         "meta": {"suite": SOURCE, "mode": "full", "data_dir": str(data_dir)},
     }
@@ -297,7 +326,17 @@ def load_full_document(data_dir: Path) -> dict[str, Any]:
         path = data_dir / filename
         if not path.exists():
             raise FileNotFoundError(f"Missing ESCO table: {path}")
+        print(f"  reading {filename} …", flush=True)
         doc[key] = _read_xlsx_rows(path)
+        print(f"    → {len(doc[key]):,} rows", flush=True)
+    for key, filename in optional.items():
+        path = data_dir / filename
+        if path.exists():
+            print(f"  reading {filename} (optional) …", flush=True)
+            doc[key] = _read_xlsx_rows(path)
+            print(f"    → {len(doc[key]):,} rows", flush=True)
+        else:
+            doc[key] = []
     return doc
 
 
@@ -324,15 +363,47 @@ def load_normalized(
     with driver.session(database=database) as session:
         if wipe:
             wipe_esco_graph(session)
+        print("  merging ISCO groups …", flush=True)
         counts = {
             "isco_groups": _merge_nodes(session, LABEL_ISCO_GROUP, payload["isco_groups"]),
-            "occupations": _merge_nodes(session, LABEL_OCCUPATION, payload["occupations"]),
-            "skill_groups": _merge_nodes(session, LABEL_SKILL_GROUP, payload["skill_groups"]),
-            "skills": _merge_nodes(session, LABEL_SKILL, payload["skills"]),
-            "classified_under": _merge_classified_under(session, payload["classified"]),
-            "broader_than": _merge_broader(session, payload["broader"]),
-            "has_skill": _merge_has_skill(session, payload["has_skill"]),
+            "occupations": 0,
+            "skill_groups": 0,
+            "skills": 0,
+            "classified_under": 0,
+            "broader_than": 0,
+            "has_skill": 0,
+            "related_to": 0,
         }
+        print(f"    → {counts['isco_groups']:,}", flush=True)
+        print("  merging occupations …", flush=True)
+        counts["occupations"] = _merge_nodes(
+            session, LABEL_OCCUPATION, payload["occupations"]
+        )
+        print(f"    → {counts['occupations']:,}", flush=True)
+        print("  merging skill groups …", flush=True)
+        counts["skill_groups"] = _merge_nodes(
+            session, LABEL_SKILL_GROUP, payload["skill_groups"]
+        )
+        print(f"    → {counts['skill_groups']:,}", flush=True)
+        print("  merging skills …", flush=True)
+        counts["skills"] = _merge_nodes(session, LABEL_SKILL, payload["skills"])
+        print(f"    → {counts['skills']:,}", flush=True)
+        print("  merging CLASSIFIED_UNDER …", flush=True)
+        counts["classified_under"] = _merge_classified_under(
+            session, payload["classified"]
+        )
+        print(f"    → {counts['classified_under']:,}", flush=True)
+        print("  merging BROADER_THAN …", flush=True)
+        counts["broader_than"] = _merge_broader(session, payload["broader"])
+        print(f"    → {counts['broader_than']:,}", flush=True)
+        print("  merging HAS_SKILL …", flush=True)
+        counts["has_skill"] = _merge_has_skill(session, payload["has_skill"])
+        print(f"    → {counts['has_skill']:,}", flush=True)
+        print("  merging RELATED_TO …", flush=True)
+        counts["related_to"] = _merge_related_to(
+            session, payload.get("related_to") or []
+        )
+        print(f"    → {counts['related_to']:,}", flush=True)
     return counts
 
 
@@ -360,6 +431,7 @@ def validate_load(
             "has_skill": count_rel(REL_HAS_SKILL),
             "broader_than": count_rel(REL_BROADER_THAN),
             "classified_under": count_rel(REL_CLASSIFIED_UNDER),
+            "related_to": count_rel(REL_RELATED_TO),
         }
 
         dangling = session.run(
@@ -382,17 +454,31 @@ def validate_load(
         ).single()
         blank_n = int(blank["c"]) if blank else 0
 
-    # MERGE dedupes duplicate URIs in source xlsx, so live node counts may be
-    # slightly lower than raw input rows. Edges should match payload lengths.
+        # Occupations without any skill (should be rare / none in full ESCO)
+        orphan_occ = session.run(
+            f"""
+            MATCH (o:{LABEL_OCCUPATION})
+            WHERE NOT (o)-[:{REL_HAS_SKILL}]->()
+            RETURN count(o) AS c
+            """
+        ).single()
+        orphan_occ_n = int(orphan_occ["c"]) if orphan_occ else 0
+
+    # Node counts must match payload (unique ids after dedupe).
     assert live["occupations"] == expected["occupations"], live
     assert live["skills"] == expected["skills"], live
     assert live["isco_groups"] == expected["isco_groups"], live
     assert live["skill_groups"] == expected["skill_groups"], live
+    # Edge counts: live graph must match what MERGE actually created.
     assert live["has_skill"] == expected["has_skill"], live
     assert live["broader_than"] == expected["broader_than"], live
     assert live["classified_under"] == expected["classified_under"], live
+    assert live["related_to"] == expected["related_to"], live
     assert dangling_n == 0, f"dangling HAS_SKILL edges: {dangling_n}"
     assert blank_n == 0, f"blank identity nodes: {blank_n}"
+    # Completeness signal: almost every occupation should link to skills
+    if live["occupations"] > 100:
+        assert orphan_occ_n == 0, f"occupations with no HAS_SKILL: {orphan_occ_n}"
     return live
 
 
@@ -413,6 +499,7 @@ def run_load(
     else:
         raise ValueError(f"unknown mode: {mode}")
 
+    print(f"Normalizing ({mode}) …", flush=True)
     payload = normalize_fixture(doc)
     # unique by id (source dumps have a few duplicate URIs)
     for key in ("occupations", "skills", "isco_groups", "skill_groups"):
@@ -420,10 +507,22 @@ def run_load(
         for row in payload[key]:
             seen[row["id"]] = row
         payload[key] = list(seen.values())
+    print(
+        f"  unique occupations={len(payload['occupations']):,} "
+        f"skills={len(payload['skills']):,} "
+        f"isco={len(payload['isco_groups']):,} "
+        f"skill_groups={len(payload['skill_groups']):,} "
+        f"has_skill_rows={len(payload['has_skill']):,} "
+        f"broader_rows={len(payload['broader']):,} "
+        f"related_rows={len(payload.get('related_to') or []):,}",
+        flush=True,
+    )
 
     with neo4j_driver() as (driver, database):
         verify_connectivity(driver)
+        print("Connected to Neo4j. Loading …", flush=True)
         counts = load_normalized(driver, payload, database=database, wipe=wipe)
+        print("Validating …", flush=True)
         live = validate_load(driver, counts, database=database)
     return live
 
