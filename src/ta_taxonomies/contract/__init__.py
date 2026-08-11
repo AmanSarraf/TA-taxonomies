@@ -16,6 +16,9 @@ from ta_taxonomies.contract.models import (
     Candidate,
     Edge,
     Node,
+    Path,
+    PolicyRef,
+    SuiteName,
     ToolResult,
 )
 from ta_taxonomies.contract.protocols import Suite
@@ -24,6 +27,9 @@ __all__ = [
     "Candidate",
     "Edge",
     "Node",
+    "Path",
+    "PolicyRef",
     "Suite",
+    "SuiteName",
     "ToolResult",
 ]

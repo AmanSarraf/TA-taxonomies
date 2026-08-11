@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
-from ta_taxonomies.contract.models import ToolResult
+from ta_taxonomies.contract.models import Path, PolicyRef, ToolResult
 
 
 @runtime_checkable
@@ -45,6 +45,6 @@ class Suite(Protocol):
         """Pathfind: depth-capped, cycle-free multi-hop paths between two nodes."""
         ...
 
-    def score_paths(self, paths: list[list[str]], policy: str) -> ToolResult:
+    def score_paths(self, paths: list[Path], policy: PolicyRef) -> ToolResult:
         """Evaluate: rank paths under a named, versioned policy (not free invent)."""
         ...

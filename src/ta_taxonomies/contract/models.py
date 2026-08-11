@@ -14,7 +14,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
-SuiteName = Literal["esco", "onet", "sfia", "bls"]
+SuiteName = Literal["esco", "onet", "sfia", "bls", "jobtech"]
 
 
 class Node(BaseModel):
@@ -57,6 +57,27 @@ class Edge(BaseModel):
     from_id: str
     to_id: str
     properties: dict[str, Any] = Field(default_factory=dict)
+
+
+class Path(BaseModel):
+    """An ordered graph route with the relationships needed to explain it."""
+
+    nodes: list[str] = Field(
+        ...,
+        min_length=1,
+        description="Ordered suite-scoped node IDs in the route",
+    )
+    edges: list[Edge] = Field(
+        default_factory=list,
+        description="Ordered graph edges connecting adjacent route nodes",
+    )
+
+
+class PolicyRef(BaseModel):
+    """Stable identity of a declared path-scoring policy."""
+
+    name: str = Field(..., min_length=1, description="Human-readable policy name")
+    version: str = Field(..., min_length=1, description="Policy version identifier")
 
 
 class Candidate(BaseModel):
@@ -102,9 +123,9 @@ class ToolResult(BaseModel):
     nodes: list[Node] = Field(default_factory=list)
     edges: list[Edge] = Field(default_factory=list)
     candidates: list[Candidate] = Field(default_factory=list)
-    paths: list[list[str]] = Field(
+    paths: list[Path] = Field(
         default_factory=list,
-        description="Node-id sequences for enumerate_paths",
+        description="Ordered nodes and edges returned by enumerate_paths",
     )
     warnings: list[str] = Field(default_factory=list)
     evidence: list[str] = Field(
