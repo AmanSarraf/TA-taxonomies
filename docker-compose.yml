@@ -1,0 +1,31 @@
+# Local Neo4j 5 for TA-taxonomies suite loaders (Sprint 4 default).
+# Usage:
+#   docker compose up -d
+#   open http://localhost:7474  (Bolt: bolt://localhost:7687)
+# Aura: skip this file and set NEO4J_URI / NEO4J_USER / NEO4J_PASSWORD in .env
+
+services:
+  neo4j:
+    image: neo4j:5-community
+    container_name: ta-neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-taxonomies-dev}
+      NEO4J_server_memory_heap_initial__size: 512m
+      NEO4J_server_memory_heap_max__size: 1G
+      NEO4J_server_memory_pagecache_size: 512m
+    volumes:
+      - ta_neo4j_data:/data
+      - ta_neo4j_logs:/logs
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:7474 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+volumes:
+  ta_neo4j_data:
+  ta_neo4j_logs:
