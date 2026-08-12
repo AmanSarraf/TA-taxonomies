@@ -1,11 +1,39 @@
-"""The suite contract: the typed tool surface every suite implements.
+"""Public suite contract for TA-agents: models + Suite protocol.
 
-    search_nodes(text, kind?)                -> candidates + confidence
-    get_neighbors(node_id, rel_types?)       -> nodes + edges
-    enumerate_paths(from_id, to_id, limits)  -> depth-capped, cycle-free paths
-    score_paths(paths, policy)               -> ranked under a named policy
+Use case: import Node, ToolResult, Suite, etc. from here — the boundary
+between TA-taxonomies and the agent runtime. Do not import suite loaders or
+Neo4j helpers into agents.
 
-This package is the ONLY surface TA-agents may import. Typed I/O (Pydantic
-v2); node IDs are suite-scoped; every node carries source + source_id;
-evidence is a pointer, not a payload. Skeleton.
+Tool methods (see also ``protocols.Suite``)::
+
+    search_nodes · get_neighbors · enumerate_paths · score_paths
+
+Rules: suite-scoped ids; source + source_id on nodes; evidence is a pointer,
+not a licensed payload.
 """
+
+from ta_taxonomies.contract.models import (
+    Candidate,
+    Edge,
+    Node,
+    Path,
+    PolicyRef,
+    PruningStats,
+    ScoredPath,
+    SuiteName,
+    ToolResult,
+)
+from ta_taxonomies.contract.protocols import Suite
+
+__all__ = [
+    "Candidate",
+    "Edge",
+    "Node",
+    "Path",
+    "PolicyRef",
+    "PruningStats",
+    "ScoredPath",
+    "Suite",
+    "SuiteName",
+    "ToolResult",
+]
