@@ -202,7 +202,7 @@ def normalize_document(doc: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
     classified: list[dict[str, Any]] = []
     unmatched_classifications: list[dict[str, Any]] = []
     isco_by_code: dict[str, str] = {}
-    isco_by_numeric_code: dict[str, str | None] = {}
+    isco_by_numeric_code: dict[str, tuple[str, str] | None] = {}
 
     isco_groups: list[dict[str, Any]] = []
     for g in doc.get("isco_groups", []):
@@ -222,7 +222,7 @@ def normalize_document(doc: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
             if numeric_key:
                 existing = isco_by_numeric_code.get(numeric_key)
                 isco_by_numeric_code[numeric_key] = (
-                    row["id"]
+                    (code, row["id"])
                     if existing is None and numeric_key not in isco_by_numeric_code
                     else None
                 )
@@ -241,10 +241,14 @@ def normalize_document(doc: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
             extra={"isco_group": isco_group},
         )
         occupations.append(row)
+        target_code = isco_group
         target_id = isco_by_code.get(isco_group or "")
         if target_id is None:
-            target_id = isco_by_numeric_code.get(_numeric_code_key(isco_group) or "")
+            numeric_match = isco_by_numeric_code.get(_numeric_code_key(isco_group) or "")
+            if numeric_match:
+                target_code, target_id = numeric_match
         if isco_group and target_id:
+            row["extra"]["isco_group"] = target_code
             classified.append({"from_id": row["id"], "to_id": target_id})
         elif isco_group:
             row["extra"]["classification_status"] = "unmatched"
@@ -306,12 +310,19 @@ def normalize_document(doc: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
         )
 
     related: list[dict[str, Any]] = []
-    for r in doc.get("skill_skill_relations", []):
+    for index, r in enumerate(doc.get("skill_skill_relations", [])):
         # full xlsx: originalSkillUri / relatedSkillUri
         ou = r.get("originalSkillUri") or r.get("fromUri")
         ru = r.get("relatedSkillUri") or r.get("toUri")
         if not ou or not ru:
-            continue
+            missing = [
+                name
+                for name, value in (("originalSkillUri", ou), ("relatedSkillUri", ru))
+                if not value
+            ]
+            raise EscoLoadValidationError(
+                f"skill_skill_relations row {index} is missing {', '.join(missing)}"
+            )
         related.append(
             {
                 "from_id": suite_id_from_uri(str(ou)),

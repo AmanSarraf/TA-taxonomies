@@ -54,6 +54,7 @@ def test_numeric_occupation_isco_code_resolves_to_uri_code_with_leading_zero() -
             "to_id": "esco:isco:0110",
         }
     ]
+    assert payload["occupations"][0]["extra"]["isco_group"] == "0110"
     assert payload["unmatched_classifications"] == []
 
 
@@ -78,3 +79,24 @@ def test_unmatched_occupation_isco_code_is_reported() -> None:
             "isco_group": "9999",
         }
     ]
+
+
+def test_malformed_skill_relationship_is_not_silently_dropped() -> None:
+    import pytest
+
+    from ta_taxonomies.suites.esco.load import EscoLoadValidationError
+
+    with pytest.raises(
+        EscoLoadValidationError,
+        match="skill_skill_relations row 0 is missing relatedSkillUri",
+    ):
+        normalize_document(
+            {
+                "skill_skill_relations": [
+                    {
+                        "originalSkillUri": "http://data.europa.eu/esco/skill/a",
+                        "relatedSkillUri": None,
+                    }
+                ]
+            }
+        )
