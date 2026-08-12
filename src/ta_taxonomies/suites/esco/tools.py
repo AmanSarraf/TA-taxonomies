@@ -36,6 +36,7 @@ from ta_taxonomies.suites.esco.config import (
     LABEL_ESCO_NODE,
     LABEL_ISCO_GROUP,
     LABEL_OCCUPATION,
+    LABEL_SKILL,
     LABEL_SKILL_GROUP,
     MAX_BRANCHING,
     MAX_FRONTIER_PATHS,
