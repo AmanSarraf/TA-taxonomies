@@ -59,5 +59,5 @@ Path enumeration is cycle-free and deliberately bounded for ESCO's high-degree
 skill hubs: depth at most 6, at most 25 expansions per node, a 500-path frontier,
 and at most 100 returned paths. Essential edges are considered before optional
 edges; ties use relationship type and node ID. `ToolResult.pruning` reports how
-many branches were cut. These priorities are Talent Angels traversal policy,
-not weights published by ESCO.
+many path extensions were cut. These priorities are Talent Angels traversal
+policy, not weights published by ESCO.

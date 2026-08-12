@@ -5,7 +5,12 @@ from __future__ import annotations
 from typing import Any
 
 from ta_taxonomies.contract.models import Path, PolicyRef
-from ta_taxonomies.suites.esco.config import CONF_CONTAINS, MAX_PATH_DEPTH, MAX_PATHS
+from ta_taxonomies.suites.esco.config import (
+    CONF_CONTAINS,
+    MAX_BRANCHING,
+    MAX_PATH_DEPTH,
+    MAX_PATHS,
+)
 from ta_taxonomies.suites.esco.tools import EscoSuite
 
 
@@ -131,6 +136,60 @@ def test_bounded_paths_are_cycle_free_typed_and_report_pruning() -> None:
     ]
     assert pruned == 1
     assert all("[*" not in query for query in session.queries)
+
+
+def test_branch_pruning_counts_each_path_prefix_cut() -> None:
+    shared_rows = [
+        {
+            "current_id": "hub",
+            "neighbor_id": "target" if index == 0 else f"neighbor-{index}",
+            "rel_type": "RELATED_TO",
+            "rel_props": {},
+            "from_id": "hub",
+            "to_id": "target" if index == 0 else f"neighbor-{index}",
+        }
+        for index in range(MAX_BRANCHING + 2)
+    ]
+    session = _Session(
+        [
+            [
+                {
+                    "current_id": "start",
+                    "neighbor_id": side,
+                    "rel_type": "RELATED_TO",
+                    "rel_props": {},
+                    "from_id": "start",
+                    "to_id": side,
+                }
+                for side in ("left", "right")
+            ],
+            [
+                {
+                    "current_id": side,
+                    "neighbor_id": "hub",
+                    "rel_type": "RELATED_TO",
+                    "rel_props": {},
+                    "from_id": side,
+                    "to_id": "hub",
+                }
+                for side in ("left", "right")
+            ],
+            shared_rows,
+        ]
+    )
+
+    paths, pruned = EscoSuite._bounded_paths(
+        session,  # type: ignore[arg-type]
+        "start",
+        "target",
+        max_depth=3,
+        max_paths=10,
+    )
+
+    assert len(paths) == 2
+    # Two rows over the branch cap are cut for each of the two prefixes (4),
+    # then 24 retained non-target extensions per prefix hit max depth (48).
+    assert pruned == 52
 
 
 def test_score_paths_uses_typed_contract_even_while_policy_is_deferred() -> None:

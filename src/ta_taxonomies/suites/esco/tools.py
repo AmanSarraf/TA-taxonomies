@@ -36,7 +36,6 @@ from ta_taxonomies.suites.esco.config import (
     LABEL_ESCO_NODE,
     LABEL_ISCO_GROUP,
     LABEL_OCCUPATION,
-    LABEL_SKILL,
     LABEL_SKILL_GROUP,
     MAX_BRANCHING,
     MAX_FRONTIER_PATHS,
@@ -408,7 +407,7 @@ class EscoSuite:
         max_depth: int = 4,
         max_paths: int = 20,
     ) -> ToolResult:
-        """Return bounded, cycle-free routes plus an essential-skill gap."""
+        """Return bounded, cycle-free routes with explicit pruning counts."""
         if max_depth < 1 or max_depth > MAX_PATH_DEPTH:
             return ToolResult(warnings=["invalid_max_depth"])
         if max_paths < 1 or max_paths > MAX_PATHS:
@@ -418,31 +417,6 @@ class EscoSuite:
             ends = _fetch_by_ids(session, [from_id, to_id])
             if from_id not in ends or to_id not in ends:
                 return ToolResult(warnings=["endpoint_not_found"], nodes=list(ends.values()))
-
-            # Skill gap for two occupations: essential skills in target not in source
-            gap = session.run(
-                f"""
-                MATCH (a:{LABEL_ESCO_NODE} {{id: $from_id}})
-                      -[r1:{REL_HAS_SKILL}]->(s:{LABEL_SKILL})
-                WHERE a.source = $source AND s.source = $source
-                  AND r1.relation_type = 'essential'
-                WITH collect(DISTINCT s) AS src_skills
-                MATCH (b:{LABEL_ESCO_NODE} {{id: $to_id}})
-                      -[r2:{REL_HAS_SKILL}]->(t:{LABEL_SKILL})
-                WHERE b.source = $source AND t.source = $source
-                  AND r2.relation_type = 'essential' AND NOT t IN src_skills
-                RETURN t.id AS id, t.pref_label AS pref_label, t.source AS source,
-                       t.source_id AS source_id, t.uri AS uri, t.kind AS kind,
-                       t.code AS code, t.description AS description,
-                       t.alt_labels AS alt_labels, labels(t) AS labels
-                LIMIT $limit
-                """,
-                from_id=from_id,
-                to_id=to_id,
-                limit=max_paths,
-                source=SOURCE,
-            )
-            gap_nodes = [_record_to_node(dict(r)) for r in gap]
 
             paths, pruned = self._bounded_paths(
                 session,
@@ -455,11 +429,10 @@ class EscoSuite:
             all_ids = {from_id, to_id}
             for path in paths:
                 all_ids.update(path.node_ids)
-            all_ids.update(n.id for n in gap_nodes)
             nodes = list(_fetch_by_ids(session, list(all_ids)).values())
 
             warnings: list[str] = []
-            if not paths and not gap_nodes:
+            if not paths:
                 warnings.append("no_path")
 
             return ToolResult(
@@ -471,8 +444,6 @@ class EscoSuite:
                     pruned=pruned,
                 ),
                 meta={
-                    "skill_gap_essential": [n.id for n in gap_nodes],
-                    "skill_gap_labels": [n.label for n in gap_nodes],
                     "from_id": from_id,
                     "to_id": to_id,
                     "max_depth": max_depth,
@@ -529,10 +500,11 @@ class EscoSuite:
             expansions: dict[str, list[dict[str, Any]]] = {}
             for node_id, rows in by_node.items():
                 expansions[node_id] = rows[:MAX_BRANCHING]
-                pruned += max(0, len(rows) - MAX_BRANCHING)
 
             next_frontier: list[Path] = []
             for path in frontier:
+                rows = by_node.get(path.node_ids[-1], [])
+                pruned += max(0, len(rows) - MAX_BRANCHING)
                 for row in expansions.get(path.node_ids[-1], []):
                     neighbor_id = row["neighbor_id"]
                     if neighbor_id in path.node_ids:
