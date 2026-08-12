@@ -26,6 +26,10 @@ def test_suite_id_from_uri() -> None:
 
 
 def test_code_to_str_float() -> None:
+    # The occupations xlsx reads ISCO 0110 as 110.0. The direct normalization
+    # loses the leading zero, so normalize_document must resolve it against the
+    # authoritative codes derived from ISCO concept URIs.
+    assert code_to_str(110.0) == "110"
     assert code_to_str(2512.0) == "2512"
     assert code_to_str(8121.4) == "8121.4"
     assert code_to_str("2654.1.7") == "2654.1.7"

@@ -27,3 +27,54 @@ def test_fixture_normalize_shapes() -> None:
         assert edge["relation_type"] in {"essential", "optional"}
         assert edge["from_id"].startswith("esco:occupation:")
         assert edge["to_id"].startswith("esco:skill:")
+
+
+def test_numeric_occupation_isco_code_resolves_to_uri_code_with_leading_zero() -> None:
+    payload = normalize_document(
+        {
+            "isco_groups": [
+                {
+                    "conceptUri": "http://data.europa.eu/esco/isco/C0110",
+                    "preferredLabel": "Commissioned armed forces officers",
+                }
+            ],
+            "occupations": [
+                {
+                    "conceptUri": "http://data.europa.eu/esco/occupation/officer",
+                    "preferredLabel": "armed forces officer",
+                    "iscoGroup": 110.0,
+                }
+            ],
+        }
+    )
+
+    assert payload["classified"] == [
+        {
+            "from_id": "esco:occupation:officer",
+            "to_id": "esco:isco:0110",
+        }
+    ]
+    assert payload["unmatched_classifications"] == []
+
+
+def test_unmatched_occupation_isco_code_is_reported() -> None:
+    payload = normalize_document(
+        {
+            "isco_groups": [],
+            "occupations": [
+                {
+                    "conceptUri": "http://data.europa.eu/esco/occupation/unknown",
+                    "preferredLabel": "unknown occupation",
+                    "iscoGroup": 9999.0,
+                }
+            ],
+        }
+    )
+
+    assert payload["classified"] == []
+    assert payload["unmatched_classifications"] == [
+        {
+            "occupation_id": "esco:occupation:unknown",
+            "isco_group": "9999",
+        }
+    ]

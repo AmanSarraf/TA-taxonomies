@@ -9,6 +9,23 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      neo4j:
+        image: neo4j:5-community
+        env:
+          NEO4J_AUTH: neo4j/test-password
+        ports:
+          - 7687:7687
+        options: >-
+          --health-cmd "cypher-shell -u neo4j -p test-password 'RETURN 1;'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      NEO4J_URI: bolt://localhost:7687
+      NEO4J_USER: neo4j
+      NEO4J_PASSWORD: test-password
+      NEO4J_DATABASE: neo4j
     strategy:
       matrix:
         python-version: ["3.11", "3.12"]

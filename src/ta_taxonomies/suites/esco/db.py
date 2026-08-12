@@ -23,7 +23,11 @@ def neo4j_config_from_env() -> dict[str, str]:
     load_dotenv()
     uri = os.getenv("NEO4J_URI", "bolt://localhost:7687")
     user = os.getenv("NEO4J_USER", "neo4j")
-    password = os.getenv("NEO4J_PASSWORD", "taxonomies-dev")
+    password = os.getenv("NEO4J_PASSWORD")
+    if not password:
+        raise ValueError(
+            "NEO4J_PASSWORD is required; set it explicitly in the environment or a local .env file"
+        )
     database = os.getenv("NEO4J_DATABASE", "neo4j")
     return {"uri": uri, "user": user, "password": password, "database": database}
 

@@ -13,6 +13,7 @@ from __future__ import annotations
 from neo4j import Driver
 
 from ta_taxonomies.suites.esco.config import (
+    LABEL_ESCO_NODE,
     LABEL_ISCO_GROUP,
     LABEL_OCCUPATION,
     LABEL_SKILL,
@@ -20,17 +21,24 @@ from ta_taxonomies.suites.esco.config import (
 )
 
 # Constraints: uniqueness on suite-scoped id (and uri for provenance joins)
-CONSTRAINTS = [
-    f"CREATE CONSTRAINT esco_{label.lower()}_id IF NOT EXISTS "
-    f"FOR (n:{label}) REQUIRE n.id IS UNIQUE"
-    for label in (LABEL_OCCUPATION, LABEL_SKILL, LABEL_ISCO_GROUP, LABEL_SKILL_GROUP)
-] + [
-    f"CREATE CONSTRAINT esco_{label.lower()}_uri IF NOT EXISTS "
-    f"FOR (n:{label}) REQUIRE n.uri IS UNIQUE"
-    for label in (LABEL_OCCUPATION, LABEL_SKILL, LABEL_ISCO_GROUP, LABEL_SKILL_GROUP)
-]
+CONSTRAINTS: list[str] = (
+    [
+        f"CREATE CONSTRAINT esco_node_id IF NOT EXISTS "
+        f"FOR (n:{LABEL_ESCO_NODE}) REQUIRE n.id IS UNIQUE",
+    ]
+    + [
+        f"CREATE CONSTRAINT esco_{label.lower()}_id IF NOT EXISTS "
+        f"FOR (n:{label}) REQUIRE n.id IS UNIQUE"
+        for label in (LABEL_OCCUPATION, LABEL_SKILL, LABEL_ISCO_GROUP, LABEL_SKILL_GROUP)
+    ]
+    + [
+        f"CREATE CONSTRAINT esco_{label.lower()}_uri IF NOT EXISTS "
+        f"FOR (n:{label}) REQUIRE n.uri IS UNIQUE"
+        for label in (LABEL_OCCUPATION, LABEL_SKILL, LABEL_ISCO_GROUP, LABEL_SKILL_GROUP)
+    ]
+)
 
-INDEXES = [
+INDEXES: list[str] = [
     f"CREATE INDEX esco_{label.lower()}_pref IF NOT EXISTS FOR (n:{label}) ON (n.pref_label)"
     for label in (LABEL_OCCUPATION, LABEL_SKILL, LABEL_ISCO_GROUP, LABEL_SKILL_GROUP)
 ]

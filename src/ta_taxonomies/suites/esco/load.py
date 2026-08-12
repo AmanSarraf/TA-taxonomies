@@ -28,6 +28,7 @@ from typing import Any
 from neo4j import Driver, Session
 
 from ta_taxonomies.suites.esco.config import (
+    LABEL_ESCO_NODE,
     LABEL_ISCO_GROUP,
     LABEL_OCCUPATION,
     LABEL_SKILL,
@@ -51,6 +52,10 @@ FIXTURE_PATH = Path(__file__).resolve().parent / "fixtures" / "fixture.json"
 BATCH = 200
 
 
+class EscoLoadValidationError(RuntimeError):
+    """Raised when normalized ESCO rows cannot be represented faithfully."""
+
+
 def _fixture_path() -> Path:
     return FIXTURE_PATH
 
@@ -66,6 +71,7 @@ def _merge_nodes(session: Session, label: str, rows: list[dict[str, Any]]) -> in
     cypher = f"""
     UNWIND $rows AS row
     MERGE (n:{label} {{id: row.id}})
+    SET n:{LABEL_ESCO_NODE}
     SET n.uri = row.uri,
         n.source = row.source,
         n.source_id = row.source_id,
@@ -84,15 +90,27 @@ def _merge_nodes(session: Session, label: str, rows: list[dict[str, Any]]) -> in
     return total
 
 
-def _merge_rel_count(session: Session, cypher: str, rows: list[dict[str, Any]]) -> int:
-    """Run batched MERGE and sum Neo4j-reported match counts (skips missing ends)."""
+def _merge_rel_count(
+    session: Session,
+    cypher: str,
+    rows: list[dict[str, Any]],
+    *,
+    relationship: str,
+) -> int:
+    """Run batched MERGE, failing clearly when any endpoint is missing."""
     if not rows:
         return 0
     total = 0
     for i in range(0, len(rows), BATCH):
         chunk = rows[i : i + BATCH]
         rec = session.run(cypher, rows=chunk).single()
-        total += int(rec["c"]) if rec else 0
+        matched = int(rec["c"]) if rec else 0
+        if matched != len(chunk):
+            raise EscoLoadValidationError(
+                f"{relationship} merge attempted {len(chunk)} rows but matched {matched}; "
+                f"missing endpoints {len(chunk) - matched}"
+            )
+        total += matched
     return total
 
 
@@ -105,7 +123,7 @@ def _merge_has_skill(session: Session, rows: list[dict[str, Any]]) -> int:
     SET r.relation_type = row.relation_type
     RETURN count(*) AS c
     """
-    return _merge_rel_count(session, cypher, rows)
+    return _merge_rel_count(session, cypher, rows, relationship=REL_HAS_SKILL)
 
 
 def _merge_broader(
@@ -115,12 +133,12 @@ def _merge_broader(
     """MERGE BROADER_THAN edges. Endpoints may be different labels; match by id."""
     cypher = f"""
     UNWIND $rows AS row
-    MATCH (a {{id: row.from_id}})
-    MATCH (b {{id: row.to_id}})
+    MATCH (a:{LABEL_ESCO_NODE} {{id: row.from_id}})
+    MATCH (b:{LABEL_ESCO_NODE} {{id: row.to_id}})
     MERGE (a)-[r:{REL_BROADER_THAN}]->(b)
     RETURN count(*) AS c
     """
-    return _merge_rel_count(session, cypher, rows)
+    return _merge_rel_count(session, cypher, rows, relationship=REL_BROADER_THAN)
 
 
 def _merge_classified_under(session: Session, rows: list[dict[str, Any]]) -> int:
@@ -131,7 +149,7 @@ def _merge_classified_under(session: Session, rows: list[dict[str, Any]]) -> int
     MERGE (o)-[:{REL_CLASSIFIED_UNDER}]->(g)
     RETURN count(*) AS c
     """
-    return _merge_rel_count(session, cypher, rows)
+    return _merge_rel_count(session, cypher, rows, relationship=REL_CLASSIFIED_UNDER)
 
 
 def _merge_related_to(session: Session, rows: list[dict[str, Any]]) -> int:
@@ -143,7 +161,14 @@ def _merge_related_to(session: Session, rows: list[dict[str, Any]]) -> int:
     SET r.relation_type = row.relation_type
     RETURN count(*) AS c
     """
-    return _merge_rel_count(session, cypher, rows)
+    return _merge_rel_count(session, cypher, rows, relationship=REL_RELATED_TO)
+
+
+def _numeric_code_key(code: str | None) -> str | None:
+    """Return a comparison key for integer-like codes without claiming identity."""
+    if not code or not code.isdigit():
+        return None
+    return code.lstrip("0") or "0"
 
 
 def _node_row(
@@ -175,7 +200,9 @@ def normalize_document(doc: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
     """Translate an ESCO document (fixture JSON or full xlsx-shaped dict) into MERGE payloads."""
     occupations: list[dict[str, Any]] = []
     classified: list[dict[str, Any]] = []
+    unmatched_classifications: list[dict[str, Any]] = []
     isco_by_code: dict[str, str] = {}
+    isco_by_numeric_code: dict[str, str | None] = {}
 
     isco_groups: list[dict[str, Any]] = []
     for g in doc.get("isco_groups", []):
@@ -191,6 +218,14 @@ def normalize_document(doc: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
         isco_groups.append(row)
         if code:
             isco_by_code[code] = row["id"]
+            numeric_key = _numeric_code_key(code)
+            if numeric_key:
+                existing = isco_by_numeric_code.get(numeric_key)
+                isco_by_numeric_code[numeric_key] = (
+                    row["id"]
+                    if existing is None and numeric_key not in isco_by_numeric_code
+                    else None
+                )
 
     for o in doc.get("occupations", []):
         uri = str(o["conceptUri"])
@@ -206,8 +241,14 @@ def normalize_document(doc: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
             extra={"isco_group": isco_group},
         )
         occupations.append(row)
-        if isco_group and isco_group in isco_by_code:
-            classified.append({"from_id": row["id"], "to_id": isco_by_code[isco_group]})
+        target_id = isco_by_code.get(isco_group or "")
+        if target_id is None:
+            target_id = isco_by_numeric_code.get(_numeric_code_key(isco_group) or "")
+        if isco_group and target_id:
+            classified.append({"from_id": row["id"], "to_id": target_id})
+        elif isco_group:
+            row["extra"]["classification_status"] = "unmatched"
+            unmatched_classifications.append({"occupation_id": row["id"], "isco_group": isco_group})
 
     skills: list[dict[str, Any]] = []
     for s in doc.get("skills", []):
@@ -287,6 +328,7 @@ def normalize_document(doc: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
         "has_skill": has_skill,
         "broader": broader,
         "classified": classified,
+        "unmatched_classifications": unmatched_classifications,
         "related_to": related,
     }
 
@@ -350,10 +392,12 @@ def wipe_esco_graph(session: Session) -> None:
     session.run(
         f"""
         MATCH (n)
-        WHERE n:{LABEL_OCCUPATION} OR n:{LABEL_SKILL}
-           OR n:{LABEL_ISCO_GROUP} OR n:{LABEL_SKILL_GROUP}
+        WHERE n.source = $source
+          AND (n:{LABEL_OCCUPATION} OR n:{LABEL_SKILL}
+           OR n:{LABEL_ISCO_GROUP} OR n:{LABEL_SKILL_GROUP})
         DETACH DELETE n
-        """
+        """,
+        source=SOURCE,
     )
 
 
@@ -414,11 +458,18 @@ def validate_load(
     with driver.session(database=database) as session:
 
         def count_label(label: str) -> int:
-            rec = session.run(f"MATCH (n:{label}) RETURN count(n) AS c").single()
+            rec = session.run(
+                f"MATCH (n:{label}) WHERE n.source = $source RETURN count(n) AS c",
+                source=SOURCE,
+            ).single()
             return int(rec["c"]) if rec else 0
 
         def count_rel(rel: str) -> int:
-            rec = session.run(f"MATCH ()-[r:{rel}]->() RETURN count(r) AS c").single()
+            rec = session.run(
+                f"MATCH (a:{LABEL_ESCO_NODE})-[r:{rel}]->(b:{LABEL_ESCO_NODE}) "
+                "WHERE a.source = $source AND b.source = $source RETURN count(r) AS c",
+                source=SOURCE,
+            ).single()
             return int(rec["c"]) if rec else 0
 
         live = {
@@ -434,50 +485,51 @@ def validate_load(
 
         dangling = session.run(
             f"""
-            MATCH (o:{LABEL_OCCUPATION})-[r:{REL_HAS_SKILL}]->(s)
+            MATCH (o:{LABEL_OCCUPATION} {{source: $source}})-[r:{REL_HAS_SKILL}]->(s)
             WHERE NOT s:{LABEL_SKILL}
             RETURN count(r) AS c
-            """
+            """,
+            source=SOURCE,
         ).single()
         dangling_n = int(dangling["c"]) if dangling else 0
 
         blank = session.run(
             f"""
-            MATCH (n)
+            MATCH (n:{LABEL_ESCO_NODE})
             WHERE (n:{LABEL_OCCUPATION} OR n:{LABEL_SKILL}
                OR n:{LABEL_ISCO_GROUP} OR n:{LABEL_SKILL_GROUP})
               AND (n.id IS NULL OR n.id = '' OR n.source IS NULL)
             RETURN count(n) AS c
-            """
+            """,
+            source=SOURCE,
         ).single()
         blank_n = int(blank["c"]) if blank else 0
 
         # Occupations without any skill (should be rare / none in full ESCO)
         orphan_occ = session.run(
             f"""
-            MATCH (o:{LABEL_OCCUPATION})
+            MATCH (o:{LABEL_OCCUPATION} {{source: $source}})
             WHERE NOT (o)-[:{REL_HAS_SKILL}]->()
             RETURN count(o) AS c
-            """
+            """,
+            source=SOURCE,
         ).single()
         orphan_occ_n = int(orphan_occ["c"]) if orphan_occ else 0
 
-    # Node counts must match payload (unique ids after dedupe).
-    assert live["occupations"] == expected["occupations"], live
-    assert live["skills"] == expected["skills"], live
-    assert live["isco_groups"] == expected["isco_groups"], live
-    assert live["skill_groups"] == expected["skill_groups"], live
-    # Edge counts: compare to unique endpoint pairs (MERGE is idempotent; batch
-    # RETURN count(*) can over-count when the same pair appears more than once).
-    assert live["has_skill"] == expected["has_skill"], live
-    assert live["broader_than"] == expected["broader_than"], live
-    assert live["classified_under"] == expected["classified_under"], live
-    assert live["related_to"] == expected["related_to"], live
-    assert dangling_n == 0, f"dangling HAS_SKILL edges: {dangling_n}"
-    assert blank_n == 0, f"blank identity nodes: {blank_n}"
+    for name, expected_count in expected.items():
+        actual_count = live[name]
+        if actual_count != expected_count:
+            raise EscoLoadValidationError(
+                f"ESCO {name} count mismatch: expected {expected_count}, found {actual_count}"
+            )
+    if dangling_n:
+        raise EscoLoadValidationError(f"dangling HAS_SKILL edges: {dangling_n}")
+    if blank_n:
+        raise EscoLoadValidationError(f"blank identity nodes: {blank_n}")
     # Completeness signal: almost every occupation should link to skills
     if live["occupations"] > 100:
-        assert orphan_occ_n == 0, f"occupations with no HAS_SKILL: {orphan_occ_n}"
+        if orphan_occ_n:
+            raise EscoLoadValidationError(f"occupations with no HAS_SKILL: {orphan_occ_n}")
     return live
 
 
@@ -514,6 +566,15 @@ def run_load(
 
     print(f"Normalizing ({mode}) …", flush=True)
     payload = normalize_document(doc)
+    unmatched = payload["unmatched_classifications"]
+    if unmatched:
+        examples = ", ".join(f"{row['occupation_id']}→{row['isco_group']}" for row in unmatched[:5])
+        print(
+            f"  warning: {len(unmatched):,} occupations have no reliable ISCO mapping"
+            f" (examples: {examples})",
+            file=sys.stderr,
+            flush=True,
+        )
     # unique by id (source dumps have a few duplicate URIs)
     for key in ("occupations", "skills", "isco_groups", "skill_groups"):
         seen: dict[str, dict[str, Any]] = {}

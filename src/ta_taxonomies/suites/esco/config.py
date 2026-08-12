@@ -10,25 +10,26 @@ Import-only — works the same for Docker and Aura backends.
 
 from __future__ import annotations
 
-SOURCE = "esco"
+SOURCE: str = "esco"
 
 # Node labels stored in Neo4j
-LABEL_OCCUPATION = "Occupation"
-LABEL_SKILL = "Skill"
-LABEL_ISCO_GROUP = "ISCOGroup"
-LABEL_SKILL_GROUP = "SkillGroup"
+LABEL_ESCO_NODE: str = "EscoNode"
+LABEL_OCCUPATION: str = "Occupation"
+LABEL_SKILL: str = "Skill"
+LABEL_ISCO_GROUP: str = "ISCOGroup"
+LABEL_SKILL_GROUP: str = "SkillGroup"
 
 # Relationship types (suite-canonical; map onto ARCHITECTURE vocabulary)
 # HAS_SKILL carries relation_type = essential | optional
-REL_HAS_SKILL = "HAS_SKILL"
+REL_HAS_SKILL: str = "HAS_SKILL"
 # (narrower)-[:BROADER_THAN]->(broader)
-REL_BROADER_THAN = "BROADER_THAN"
+REL_BROADER_THAN: str = "BROADER_THAN"
 # (Occupation)-[:CLASSIFIED_UNDER]->(ISCOGroup)
-REL_CLASSIFIED_UNDER = "CLASSIFIED_UNDER"
+REL_CLASSIFIED_UNDER: str = "CLASSIFIED_UNDER"
 # skill ↔ skill (essential/optional in source)
-REL_RELATED_TO = "RELATED_TO"
+REL_RELATED_TO: str = "RELATED_TO"
 
-TRAVERSABLE_RELS = frozenset(
+TRAVERSABLE_RELS: frozenset[str] = frozenset(
     {
         REL_HAS_SKILL,
         REL_BROADER_THAN,
@@ -38,7 +39,7 @@ TRAVERSABLE_RELS = frozenset(
 )
 
 # kind filter values accepted by search_nodes
-KIND_ALIASES = {
+KIND_ALIASES: dict[str, str] = {
     "occupation": LABEL_OCCUPATION,
     "occupations": LABEL_OCCUPATION,
     "skill": LABEL_SKILL,
@@ -52,8 +53,8 @@ KIND_ALIASES = {
 }
 
 # Locate confidence policy (declared; not source data)
-CONF_EXACT_PREF = 0.95
-CONF_EXACT_ALT = 0.90
-CONF_CASEFOLD_UNIQUE = 0.85
-CONF_CONTAINS_TOP = 0.70
-CONF_CONTAINS_OTHER = 0.55
+CONF_EXACT_PREF: float = 0.95
+CONF_EXACT_ALT: float = 0.90
+CONF_CASEFOLD_UNIQUE: float = 0.85
+CONF_CONTAINS_TOP: float = 0.70
+CONF_CONTAINS_OTHER: float = 0.55
