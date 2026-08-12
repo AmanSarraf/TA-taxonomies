@@ -6,7 +6,7 @@ Skipped when Neo4j is not reachable (CI without Docker).
 from __future__ import annotations
 
 import pytest
-from neo4j.exceptions import Neo4jError, ServiceUnavailable
+from neo4j.exceptions import ServiceUnavailable
 
 from ta_taxonomies.suites.esco.db import neo4j_driver, verify_connectivity
 from ta_taxonomies.suites.esco.load import run_load
@@ -14,11 +14,15 @@ from ta_taxonomies.suites.esco.tools import EscoSuite
 
 
 def _neo4j_available() -> bool:
+    import os
+
+    if not os.getenv("NEO4J_PASSWORD"):
+        return False
     try:
         with neo4j_driver() as (driver, _db):
             verify_connectivity(driver)
         return True
-    except (ServiceUnavailable, Neo4jError, OSError):
+    except (ServiceUnavailable, OSError):
         return False
 
 
@@ -83,3 +87,10 @@ def test_search_skill_kind(loaded_suite: EscoSuite) -> None:
         assert all(c.node.id.startswith("esco:skill:") for c in result.candidates)
     else:
         assert "not_found" in result.warnings
+
+
+def test_search_unknown_kind_returns_warning(loaded_suite: EscoSuite) -> None:
+    result = loaded_suite.search_nodes("software developer", kind="fruit")
+
+    assert result.candidates == []
+    assert result.warnings == ["unknown_kind:fruit"]

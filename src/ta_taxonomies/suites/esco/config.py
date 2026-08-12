@@ -56,5 +56,12 @@ KIND_ALIASES: dict[str, str] = {
 CONF_EXACT_PREF = 0.95
 CONF_EXACT_ALT = 0.90
 CONF_CASEFOLD_UNIQUE = 0.85
-CONF_CONTAINS_TOP = 0.70
-CONF_CONTAINS_OTHER = 0.55
+CONF_CASEFOLD_AMBIGUOUS = 0.80
+CONF_CONTAINS = 0.70
+
+# Traversal safety policy. ESCO contains high-degree hub skills, so traversal
+# expands one hop at a time and prunes deterministically before the next hop.
+MAX_PATH_DEPTH = 6
+MAX_PATHS = 100
+MAX_BRANCHING = 25
+MAX_FRONTIER_PATHS = 500
