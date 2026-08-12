@@ -18,6 +18,8 @@ from ta_taxonomies.contract.models import (
     Node,
     Path,
     PolicyRef,
+    PruningStats,
+    ScoredPath,
     SuiteName,
     ToolResult,
 )
@@ -29,6 +31,8 @@ __all__ = [
     "Node",
     "Path",
     "PolicyRef",
+    "PruningStats",
+    "ScoredPath",
     "Suite",
     "SuiteName",
     "ToolResult",

@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 SuiteName = Literal["esco", "onet", "sfia", "bls", "jobtech"]
 
@@ -35,7 +35,7 @@ class Node(BaseModel):
     id: str = Field(..., description="Suite-scoped id, e.g. esco:occupation:…")
     kind: str = Field(..., description="Canonical or suite kind: Occupation, Skill, …")
     label: str
-    source: str
+    source: SuiteName
     source_id: str = Field(..., description="Native source identifier (usually URI)")
     properties: dict[str, Any] = Field(default_factory=dict)
 
@@ -62,7 +62,7 @@ class Edge(BaseModel):
 class Path(BaseModel):
     """An ordered graph route with the relationships needed to explain it."""
 
-    nodes: list[str] = Field(
+    node_ids: list[str] = Field(
         ...,
         min_length=1,
         description="Ordered suite-scoped node IDs in the route",
@@ -72,12 +72,53 @@ class Path(BaseModel):
         description="Ordered graph edges connecting adjacent route nodes",
     )
 
+    @model_validator(mode="after")
+    def validate_route(self) -> Path:
+        """Require one correctly oriented edge for every adjacent node pair."""
+        expected_edges = len(self.node_ids) - 1
+        if len(self.edges) != expected_edges:
+            raise ValueError(
+                f"path with {len(self.node_ids)} nodes requires exactly {expected_edges} edges"
+            )
+
+        for index, edge in enumerate(self.edges):
+            expected_from = self.node_ids[index]
+            expected_to = self.node_ids[index + 1]
+            actual_endpoints = {edge.from_id, edge.to_id}
+            expected_endpoints = {expected_from, expected_to}
+            if actual_endpoints != expected_endpoints:
+                raise ValueError(f"edge {index} must connect {expected_from!r} to {expected_to!r}")
+
+        return self
+
 
 class PolicyRef(BaseModel):
     """Stable identity of a declared path-scoring policy."""
 
     name: str = Field(..., min_length=1, description="Human-readable policy name")
     version: str = Field(..., min_length=1, description="Policy version identifier")
+
+
+class ScoredPath(BaseModel):
+    """A path score together with the declared policy that produced it."""
+
+    path: Path
+    score: float
+    policy: PolicyRef
+
+
+class PruningStats(BaseModel):
+    """Counts from bounded path enumeration without exposing discarded paths."""
+
+    considered: int = Field(..., ge=0)
+    returned: int = Field(..., ge=0)
+    pruned: int = Field(..., ge=0)
+
+    @model_validator(mode="after")
+    def validate_counts(self) -> PruningStats:
+        if self.considered != self.returned + self.pruned:
+            raise ValueError("considered must equal returned plus pruned")
+        return self
 
 
 class Candidate(BaseModel):
@@ -126,6 +167,14 @@ class ToolResult(BaseModel):
     paths: list[Path] = Field(
         default_factory=list,
         description="Ordered nodes and edges returned by enumerate_paths",
+    )
+    scored_paths: list[ScoredPath] = Field(
+        default_factory=list,
+        description="Ranked paths with scores and the policy used",
+    )
+    pruning: PruningStats | None = Field(
+        default=None,
+        description="Counts from bounded path enumeration",
     )
     warnings: list[str] = Field(default_factory=list)
     evidence: list[str] = Field(

@@ -13,14 +13,19 @@ from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
-from ta_taxonomies.contract.models import Path, PolicyRef, ToolResult
+from ta_taxonomies.contract.models import Path, PolicyRef, SuiteName, ToolResult
 
 
 @runtime_checkable
 class Suite(Protocol):
-    """Typed tool surface shared by all taxonomy suites (Locate/Connect/Pathfind)."""
+    """Typed tool surface shared by all taxonomy suites.
 
-    name: str
+    Runtime ``isinstance(obj, Suite)`` checks are supported. Runtime
+    ``issubclass(cls, Suite)`` checks raise ``TypeError`` because ``name`` is a
+    protocol data member rather than a method.
+    """
+
+    name: SuiteName
 
     def search_nodes(self, text: str, kind: str | None = None) -> ToolResult:
         """Locate: resolve free text to node candidates with confidence."""
