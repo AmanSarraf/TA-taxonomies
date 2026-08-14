@@ -1,0 +1,53 @@
+"""Load + validate ESCO fixture in Neo4j (skipped if DB down)."""
+
+from __future__ import annotations
+
+import os
+
+import pytest
+from neo4j.exceptions import ServiceUnavailable
+
+from ta_taxonomies.suites.esco.db import neo4j_driver, verify_connectivity
+from ta_taxonomies.suites.esco.load import run_load
+
+
+def _neo4j_available() -> bool:
+    if not os.getenv("NEO4J_PASSWORD"):
+        return False
+    try:
+        with neo4j_driver() as (driver, _db):
+            verify_connectivity(driver)
+        return True
+    except (ServiceUnavailable, OSError):
+        return False
+
+
+pytestmark = pytest.mark.skipif(
+    not _neo4j_available(),
+    reason="Neo4j not available (start with: docker compose up -d)",
+)
+
+
+def test_fixture_load_validates() -> None:
+    with neo4j_driver() as (driver, database):
+        with driver.session(database=database) as session:
+            session.run(
+                "MERGE (n:Occupation {id: 'onet:test-occupation'}) "
+                "SET n.source = 'onet', n.source_id = 'test-occupation'"
+            )
+
+    counts = run_load(mode="fixture", wipe=True)
+
+    assert counts["occupations"] >= 4
+    assert counts["skills"] >= 10
+    assert counts["has_skill"] >= 10
+    assert counts["isco_groups"] >= 1
+
+    with neo4j_driver() as (driver, database):
+        with driver.session(database=database) as session:
+            survivor = session.run(
+                "MATCH (n:Occupation {id: 'onet:test-occupation'}) RETURN n.source AS source"
+            ).single()
+            session.run("MATCH (n {id: 'onet:test-occupation'}) DETACH DELETE n")
+    assert survivor is not None
+    assert survivor["source"] == "onet"

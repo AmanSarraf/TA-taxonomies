@@ -20,6 +20,10 @@ dev = [
   "ruff>=0.6",
   "mypy>=1.10",
 ]
+# Full ESCO xlsx load (fixture mode does not need this)
+esco-xlsx = [
+  "openpyxl>=3.1",
+]
 
 [project.urls]
 Homepage = "https://github.com/LFX-Talent-Angels"

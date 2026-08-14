@@ -1,0 +1,1191 @@
+{
+  "meta": {
+    "suite": "esco",
+    "purpose": "Sprint 4 fixture for contract tests; real ESCO URIs, small ICT subset",
+    "attribution": "ESCO (European Commission), CC BY 4.0",
+    "note": "Pointer-not-payload subset for tests; full data under data/esco/ (gitignored)"
+  },
+  "occupations": [
+    {
+      "conceptType": "Occupation",
+      "conceptUri": "http://data.europa.eu/esco/occupation/f2b15a0e-e65a-438a-affb-29b9d50b77d1",
+      "iscoGroup": 2512.0,
+      "preferredLabel": "software developer",
+      "altLabels": "application developer\nsolutions developer\nelectric vehicle software development engineer\nprogrammer",
+      "status": "released",
+      "description": "Software developers implement or program all kinds of software systems based on specifications and designs by using programming languages, tools, and platforms.",
+      "code": 2512.4
+    },
+    {
+      "conceptType": "Occupation",
+      "conceptUri": "http://data.europa.eu/esco/occupation/d3edb8f8-3a06-47a0-8fb9-9b212c006aa2",
+      "iscoGroup": 2511.0,
+      "preferredLabel": "data analyst",
+      "altLabels": "battery data analyst\nmine electrification data analyst\ndata warehouse analyst\ndata warehousing analyst",
+      "status": "released",
+      "description": "Data analysts import, inspect, clean, transform, validate, model, or interpret collections of data with regard to the business goals of the company. They ensure that the data sourc...",
+      "code": 2511.3
+    },
+    {
+      "conceptType": "Occupation",
+      "conceptUri": "http://data.europa.eu/esco/occupation/258e46f9-0075-4a2e-adae-1ff0477e0f30",
+      "iscoGroup": 2511.0,
+      "preferredLabel": "data scientist",
+      "altLabels": "data expert\nresearch data scientist\ndata research scientist\nelectromobility data scientist",
+      "status": "released",
+      "description": "Data scientists find and interpret rich data sources, manage large amounts of data, merge data sources, ensure consistency of data-sets, and create visualisations to aid in underst...",
+      "code": 2511.4
+    },
+    {
+      "conceptType": "Occupation",
+      "conceptUri": "http://data.europa.eu/esco/occupation/c40a2919-48a9-40ea-b506-1f34f693496d",
+      "iscoGroup": 2513.0,
+      "preferredLabel": "web developer",
+      "altLabels": "web application developer\nweb developers\nweb engineer\nweb specialist",
+      "status": "released",
+      "description": "Web developers develop, implement and document web-accessible software based on the designs provided. They align the client's web presence with its business strategy, troubleshoot ...",
+      "code": 2513.5
+    },
+    {
+      "conceptType": "Occupation",
+      "conceptUri": "http://data.europa.eu/esco/occupation/0464b062-cea6-4164-b10d-956c61956ae7",
+      "iscoGroup": 2529.0,
+      "preferredLabel": "ICT security administrator",
+      "altLabels": "CISO\nIT security administrator\ninformation security administrator\nICT security administrators",
+      "status": "released",
+      "description": "ICT security administrators plan and carry out security measures to protect information and data from unauthorised access, deliberate attack, theft and corruption.",
+      "code": 2529.6
+    },
+    {
+      "conceptType": "Occupation",
+      "conceptUri": "http://data.europa.eu/esco/occupation/04ba4d6c-957d-417f-bf63-5b9e015a9f86",
+      "iscoGroup": 2512.0,
+      "preferredLabel": "software analyst",
+      "altLabels": "software requirement analyst\nprogramming analyst\nsoftware analysts\nprogrammer analyst",
+      "status": "released",
+      "description": "Software analysts elicit and prioritise user requirements, produce and document software specifications, test their application, and review them during software development. They a...",
+      "code": 2512.2
+    }
+  ],
+  "skills": [
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/000f1d3d-220f-4789-9c0a-cc742521fb02",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "Haskell",
+      "altLabels": "Haskell techniques",
+      "status": "released",
+      "description": "The techniques and principles of software development, such as analysis, algorithms, coding, testing and compiling of programming paradigms in Haskell."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/00c04e40-35ea-4ed1-824c-82f936c8f876",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "incremental development",
+      "altLabels": "gradual development",
+      "status": "released",
+      "description": "The incremental development model is a methodology to design software systems and applications."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/013441c1-1f13-47e9-80c4-9a53e8e1bc05",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "KDevelop",
+      "altLabels": "kdevplatform\nKDevelop platform",
+      "status": "released",
+      "description": "The computer program KDevelop is a suite of software development tools for writing programs, such as compiler, debugger, code editor, code highlights, packaged in a unified user in..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/034c29fa-c3ba-45ea-b8f3-bf8e3705e386",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "Erlang",
+      "altLabels": "Erlang programming language",
+      "status": "released",
+      "description": "The techniques and principles of software development, such as analysis, algorithms, coding, testing and compiling of programming paradigms in Erlang."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/03ff0d53-573a-47a0-a0ad-1995815a4339",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "information structure",
+      "altLabels": "data structuring methods\ntypes of data infrastructure\ndata infrastructure",
+      "status": "released",
+      "description": "The type of infrastructure which defines the format of data: semi-structured, unstructured and structured."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/071233c4-ad2b-4f50-b79f-768d2231163e",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "domain name service",
+      "altLabels": "DNS\nDNS server",
+      "status": "released",
+      "description": "Naming database which maps internet domain names to Internet Protocol (IP) addresses. The Domain Name System allows internet users to utilise names such as website titles instead o..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/0760bfac-9a03-427a-ad84-ccd33a2f2ae8",
+      "skillType": "knowledge",
+      "reuseLevel": "cross-sector",
+      "preferredLabel": "mathematical modelling",
+      "altLabels": "mathematical computation\nmathematical representation\nmathematical simulation",
+      "status": "released",
+      "description": "The process of establishing a mathematical representation problem, such as equations, of a real-word to provide insights, discover new features about the problematic scenario, bett..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/0823ccef-813f-4f22-afef-ac0d68615e8f",
+      "skillType": "knowledge",
+      "reuseLevel": "cross-sector",
+      "preferredLabel": "computer simulation",
+      "altLabels": "simulation software ANSYS\ncomputer-based simulation",
+      "status": "released",
+      "description": "A programme run on a computer that represents dynamic responses of a system to explore a mathematical model behaviour, using a model of a real system, composed of mathematical equa..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/0ee94c0a-3716-494a-95a2-dcbab9e58be2",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "business requirements techniques",
+      "altLabels": "business requirements identification",
+      "status": "released",
+      "description": "The procedures required to identify and analyse business and organisational needs."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/0ffdb6ac-03b5-4f1c-bfcc-3d9cb874fdf9",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "ethical hacking principles",
+      "altLabels": "ethical hacking techniques",
+      "status": "released",
+      "description": "The set of actions that are carried out to detect vulnerabilities within a computerised system in order to improve security within an organisation. They aim to identify and address..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/118a9b27-1c5a-4214-b685-1a4d9e6365ea",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "computer forensics",
+      "altLabels": "forensic IT\ndigital forensic investigation",
+      "status": "released",
+      "description": "The process of examining and recovering digital data from sources for legal evidence and crime investigation."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/11c56452-fcec-4b00-9695-cca4728e5048",
+      "skillType": "knowledge",
+      "reuseLevel": "cross-sector",
+      "preferredLabel": "marketing analytics",
+      "altLabels": "marketing data analytics",
+      "status": "released",
+      "description": "The set of processes for employing data to improve the effectiveness of marketing activities. It involves analysing metrics such as the Return on Investment (ROI) for identify oppo..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/11eebd42-44ab-401d-8a2c-bdb9fc9beb50",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "information security strategy",
+      "altLabels": "InfoSec strategy",
+      "status": "released",
+      "description": "The plan defined by a company which sets the information security objectives and measures to mitigate risks, define control objectives, establish metrics and benchmarks while compl..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/143769cb-b61e-47d8-a61e-eedfbec1016c",
+      "skillType": "knowledge",
+      "reuseLevel": "cross-sector",
+      "preferredLabel": "business intelligence",
+      "altLabels": "business analytics\nBI\nbusiness intelligence tools",
+      "status": "released",
+      "description": "The tools used to transform large amounts of raw data into relevant and helpful business information."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/1605025e-a179-421f-8f35-5b07d182a6b2",
+      "skillType": "knowledge",
+      "reuseLevel": "cross-sector",
+      "preferredLabel": "web analytics",
+      "status": "released",
+      "description": "The characteristics, tools and techniques for measurement, collection, analysis and reporting of web data to get information on the users' behaviour and to improve the performance ..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/1b7c716e-af95-4cda-a42f-6479c8b139f5",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "MDX",
+      "altLabels": "MultiDimensional eXpressions",
+      "status": "released",
+      "description": "The computer language MDX is a query language for retrieval of information from a database and of documents containing the needed information. It is developed by the software compa..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/1c2978b8-bb0d-4249-9c23-877571a4dffa",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "cloud security and compliance",
+      "altLabels": "cloud safety and compliance\ncloud safety\ncloud security\ncloud compliance",
+      "status": "released",
+      "description": "Cloud security and compliance concepts, including shared responsibility model, cloud access management capabilities, and resources for security support."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/209a5498-3449-4689-8ed9-bd08cab4fd78",
+      "skillType": "knowledge",
+      "reuseLevel": "cross-sector",
+      "preferredLabel": "engineering principles",
+      "altLabels": "engineering fieldwork principles\nengineering work principles\nengineering research principles\nengineering principle",
+      "status": "released",
+      "description": "The engineering elements like functionality, replicability, and costs in relation to the design and how they are applied in the completion of engineering projects."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/21d2f96d-35f7-4e3f-9745-c533d2dd6e97",
+      "skillType": "knowledge",
+      "reuseLevel": "cross-sector",
+      "preferredLabel": "computer programming",
+      "altLabels": "GCC\nAda\nALGOL\nVisual Basic .NET",
+      "status": "released",
+      "description": "The techniques and principles of software development, such as analysis, algorithms, coding, testing and compiling of programming paradigms (e.g. object oriented programming, funct..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/2450c3b3-e78e-435b-b84d-e05d984e71dc",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "software architecture models",
+      "altLabels": "software architecture patterns\nsoftware architecture frameworks",
+      "status": "released",
+      "description": "The set of structures and models needed to understand or describe the software system, including the software elements, the relations between them and the properties of both elemen..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/25f0ea33-b4a2-4f31-b7b4-7d20e827b180",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "data mining",
+      "altLabels": "data scraping",
+      "status": "released",
+      "description": "The methods of artificial intelligence, machine learning, statistics and databases used to extract content from a dataset."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/2d6d4784-0992-48e7-b100-22d7229b3f0a",
+      "skillType": "skill/competence",
+      "reuseLevel": "cross-sector",
+      "preferredLabel": "translate requirements into visual design",
+      "altLabels": "develop visual design from given specifications\ndevelop visual design concepts based on target audience\ndevelop visual design based on target audience\ntranslate requirement concepts into visual design",
+      "status": "released",
+      "description": "Develop visual design from given specifications and requirements, based on the analysis of the scope and target audience. Create a visual representation of ideas such as logos, web..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/2ddb1226-1117-4eb4-ae65-3a2f5a5a3c80",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "ICT network security risks",
+      "altLabels": "ICT network security threats\ninformation systems security risks",
+      "status": "released",
+      "description": "The security risk factors, such as hardware and software components, devices, interfaces and policies in ICT networks, risk assessment techniques that can be applied to assess the ..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/327d15c8-29ff-4ad4-a4fe-6536d777a45f",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "documentation types",
+      "altLabels": "documentation types of product life cycle\ninternal documentation types of product life cycle\ninternal documentation types\ntechnical documentation types",
+      "status": "released",
+      "description": "The characteristics of internal and external documentation types aligned with the product life cycle and their specific content types."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/348b74cd-49ce-4844-8bdf-ec188b497213",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "visual presentation techniques",
+      "altLabels": "Infoviz\ninformation visualisation\nvisualization interface\nInfovis",
+      "status": "released",
+      "description": "The visual representation and interaction techniques, such as histograms, scatter plots, surface plots, tree maps and parallel coordinate plots, that can be used to present abstrac..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/3bddfd7c-ab6d-40c2-883d-5e97fb7640ba",
+      "skillType": "skill/competence",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "create software design",
+      "altLabels": "create application design",
+      "status": "released",
+      "description": "Transpose a series of requirements into a clear and organised software design."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/426ceaba-6867-481c-bb6b-aee3933da7d2",
+      "preferredLabel": "ICT safety",
+      "altLabels": "ICT well-being maintenance\nICT welfare maintenance\nICT protection\ninformation and communication technologies safety",
+      "status": "released",
+      "description": "Personal protection, data protection, digital identity protection, security measures, safe and sustainable use."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/47ca0da1-cae5-4395-ae6b-fd97b9ff48d3",
+      "skillType": "knowledge",
+      "reuseLevel": "cross-sector",
+      "preferredLabel": "system backup best practice",
+      "altLabels": "backup systems reliability\ndisaster recovery best practice",
+      "status": "released",
+      "description": "The procedures related to preparing for recovery or continuation of technology infrastructure vital to an organisation."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/48db96bf-3314-45c6-bad8-fdb6e20e5639",
+      "skillType": "knowledge",
+      "reuseLevel": "cross-sector",
+      "preferredLabel": "data engineering",
+      "altLabels": "data engineering methods",
+      "status": "released",
+      "description": "The process of developing and constructing systems for implementing data collection and analysis at large scale."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/5063a99f-975b-4a7c-85e3-69ecb375b4d3",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "internet governance",
+      "altLabels": "internet regulation\ninternet governance policies",
+      "status": "released",
+      "description": "The principles, regulations, norms and programs that shape the evolution and use of internet, such as internet domain names management, registries and registrars, according to ICAN..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/5898d99a-62a4-4e10-a2e3-0d815ce44248",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "cyber attack counter-measures",
+      "altLabels": "network communications security measures\ncyber defence mechanisms\ncyber/digital/IT/ICT/information security controls\ncybersecurity measures",
+      "status": "released",
+      "description": "Methods, technologies and techniques used to defend (detect, monitor and recover) against cyber attacks. These cyber attacks include several attack vectors such as malware, denial ..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/59ea80e1-463a-4dba-82c6-d0b6d577d532",
+      "skillType": "knowledge",
+      "reuseLevel": "cross-sector",
+      "preferredLabel": "technical drawings",
+      "altLabels": "technical drawing\nscientific drawings\nspecialised drawings\nmechanical drawings",
+      "status": "released",
+      "description": "Drawing software and the various symbols, perspectives, units of measurement, notation systems, visual styles and page layouts used in technical drawings."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/6014921e-1d25-4039-adc2-04852d61880e",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "ICT debugging tools",
+      "altLabels": "software debugging tools\nICT testing tools",
+      "status": "released",
+      "description": "The ICT tools used to test and debug programs and software code, such as GNU Debugger (GDB), Intel Debugger (IDB), Microsoft Visual Studio Debugger, Valgrind and WinDbg."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/629685b8-5f9e-4522-8cff-b3e2c4ec625a",
+      "preferredLabel": "digital data processing",
+      "altLabels": "electronic data processing\nprocessing of data digitally\ndata processing\npaperless data processing",
+      "status": "released",
+      "description": "Identify, locate, retrieve, store, organise and analyse digital information, judging its relevance and purpose."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/6360a934-cc87-4954-9656-b32db20592e3",
+      "skillType": "knowledge",
+      "reuseLevel": "cross-sector",
+      "preferredLabel": "quantitative analysis",
+      "altLabels": "quantitative data analysis",
+      "status": "released",
+      "description": "The technique of employing statistical and mathematical modelling and measurement to represent a specific reality through numbers."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/65e58886-bd1e-4c5b-8ca5-8d9b353c8aa1",
+      "skillType": "knowledge",
+      "reuseLevel": "cross-sector",
+      "preferredLabel": "data visualisation software",
+      "altLabels": "data presentation software",
+      "status": "released",
+      "description": "A computer tool or application that creates a graphical and visual representation of data, allowing a better understanding and interpretation of complex data through visual element..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/68ef0e4d-5542-4e64-84f4-752cce5a3c22",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "statistical modeling techniques",
+      "altLabels": "statistical modeling",
+      "status": "released",
+      "description": "The approaches for employing statistical analysis to dataset within the data science field. It seeks to elaborate reality predictions through statistical models and explicit assump..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/696e3b5b-8b61-45af-ae4c-3ab700f197ec",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "information extraction",
+      "altLabels": "information extraction techniques",
+      "status": "released",
+      "description": "The techniques and methods used for eliciting and extracting information from unstructured or semi-structured digital documents and sources."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/69bbd53f-fbb0-4476-b4b2-ef7844464e28",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "web programming",
+      "altLabels": "markup programming",
+      "status": "released",
+      "description": "The programming paradigm that is based on combining markup (which adds context and structure to text) and other web programming code, such as AJAX, javascript and PHP, in order to ..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/6f1edc19-191f-4ba5-a048-ee69aff05bab",
+      "skillType": "knowledge",
+      "reuseLevel": "cross-sector",
+      "preferredLabel": "security engineering",
+      "altLabels": "information security engineering\nnetwork security engineering\nsystems security engineering\nsecurity management",
+      "status": "released",
+      "description": "Interdisciplinary field of study that focuses on the realisation of secure systems and the technology to protect individuals or information from malice, errors, or unauthorized acc..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/7111b95d-0ce3-441a-9d92-4c75d05c4388",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "project management",
+      "altLabels": "fundamentals of programme management\nmanagement of programmes\nmanagement of projects\nfundamentals of project management",
+      "status": "released",
+      "description": "The discipline of project management, the activities which comprise this area and the variables implied in it, such as time, resources, requirements, deadlines, and responding to u..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/72a74f69-5cf1-43c5-99b9-62a444578919",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "engineering processes",
+      "altLabels": "engineering strategy\nengineering methodologies",
+      "status": "released",
+      "description": "The systematic approach to the development and maintenance of engineering systems."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/79f24a62-7718-46e1-9b41-37be0560a5ca",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "organisational resilience",
+      "altLabels": "business resilience\noperational resilience\norganizational resilience",
+      "status": "released",
+      "description": "The strategies, methods and techniques that increase the organisation's capacity to protect and sustain the services and operations that fulfil the organisational mission and creat..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/8696aff0-18c0-4ba6-a4d0-9a21861b3e5e",
+      "skillType": "knowledge",
+      "reuseLevel": "cross-sector",
+      "preferredLabel": "World Wide Web Consortium standards",
+      "altLabels": "W3C standards",
+      "status": "released",
+      "description": "The standards, technical specifications and guidelines developed by the international organisation World Wide Web Consortium (W3C) which allow the design and development of web app..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/8ff015a0-98ea-4d80-a23e-1f68110a919e",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "software design methodologies",
+      "altLabels": "software design approaches\nsoftware design techniques",
+      "status": "released",
+      "description": "The methodologies such as Scrum, V-model and Waterfall to design software systems and applications."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/925463a7-d51f-4d5b-9f79-4d28cf30acde",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "integrated development environment software",
+      "altLabels": "Zeus IDE\nBorland C++ Builder\nCodeForge\nDev-C++",
+      "status": "released",
+      "description": "The suite of software development tools for writing programs, such as compiler, debugger, code editor, code highlights, packaged in a unified user interface, such as Visual Studio ..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/93e65de1-923c-437e-aa5b-e6002967ce71",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "web based collaborative platforms",
+      "altLabels": "digital collaboration tools\nonline collaborative tools",
+      "status": "released",
+      "description": "Online tools which facilitate communication and collaboration among Internet users in real time. Platforms with a range of functionalities created to facilitate organisational team..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/9d2e926f-53d9-41f5-98f3-19dfaa687f3f",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "tools for software configuration management",
+      "altLabels": "tools for software version control\nRudder\nNOC\nOCS Inventory NG with GLPI",
+      "status": "released",
+      "description": "The software programs to perform configuration identification, control, status accounting and audit, such as CVS, ClearCase, Subversion, GIT and TortoiseSVN perform this management..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/a846cb9e-c152-41e7-bd34-45e7ff941e3b",
+      "skillType": "knowledge",
+      "reuseLevel": "cross-sector",
+      "preferredLabel": "legal requirements of ICT products",
+      "altLabels": "legal requirements for the development and use of ICT products\ninternational regulations for the use of ICT products\nlegal requirements for the development of ICT products\nlegal requirements for the design of ICT products",
+      "status": "released",
+      "description": "The international regulations related to the development and use of ICT products."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/ca73ac82-867a-4afa-9732-834aebe896ff",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "ICT system user requirements",
+      "altLabels": "analysis of user requirement in ICT systems\nanalysis of user requirements in ICT systems",
+      "status": "released",
+      "description": "The process intended to match user and organisation's needs with system components and services, by taking into consideration the available technologies and the techniques required..."
+    },
+    {
+      "conceptType": "KnowledgeSkillCompetence",
+      "conceptUri": "http://data.europa.eu/esco/skill/fecf8a0d-62c4-4e71-9b03-0f4fc2ad7bf5",
+      "skillType": "knowledge",
+      "reuseLevel": "sector-specific",
+      "preferredLabel": "data models",
+      "altLabels": "data modelling",
+      "status": "released",
+      "description": "The techniques and existing systems used for structuring data elements and showing relationships between them, as well as methods for interpreting the data structures and relations..."
+    }
+  ],
+  "isco_groups": [
+    {
+      "conceptType": "ISCOGroup",
+      "conceptUri": "http://data.europa.eu/esco/isco/C2511",
+      "code": 2511.0,
+      "preferredLabel": "Systems analysts",
+      "status": "released",
+      "description": "Systems analysts conduct research, analyse and evaluate client information technology requirements, procedures or problems, and develop and implement proposals, recommendations, an..."
+    },
+    {
+      "conceptType": "ISCOGroup",
+      "conceptUri": "http://data.europa.eu/esco/isco/C2512",
+      "code": 2512.0,
+      "preferredLabel": "Software developers",
+      "status": "released",
+      "description": "Software developers research, analyse and evaluate requirements for existing or new software applications and operating systems, and design, develop, test and maintain software sol..."
+    },
+    {
+      "conceptType": "ISCOGroup",
+      "conceptUri": "http://data.europa.eu/esco/isco/C2513",
+      "code": 2513.0,
+      "preferredLabel": "Web and multimedia developers",
+      "status": "released",
+      "description": "Web and multimedia development professionals combine design and technical knowledge to research, analyse, evaluate, design, program and modify websites and applications that draw t..."
+    },
+    {
+      "conceptType": "ISCOGroup",
+      "conceptUri": "http://data.europa.eu/esco/isco/C2529",
+      "code": 2529.0,
+      "preferredLabel": "Database and network professionals not elsewhere classified",
+      "status": "released",
+      "description": "This unit group includes database and network professionals not classified elsewhere in Minor Group 252: Database and Network Professionals. For instance, the group includes inform..."
+    }
+  ],
+  "skill_groups": [],
+  "occupation_skill_relations": [
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/0464b062-cea6-4164-b10d-956c61956ae7",
+      "occupationLabel": "ICT security administrator",
+      "relationType": "essential",
+      "skillUri": "http://data.europa.eu/esco/skill/426ceaba-6867-481c-bb6b-aee3933da7d2",
+      "skillLabel": "ICT safety"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/0464b062-cea6-4164-b10d-956c61956ae7",
+      "occupationLabel": "ICT security administrator",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/0ffdb6ac-03b5-4f1c-bfcc-3d9cb874fdf9",
+      "skillLabel": "ethical hacking principles"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/0464b062-cea6-4164-b10d-956c61956ae7",
+      "occupationLabel": "ICT security administrator",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/2ddb1226-1117-4eb4-ae65-3a2f5a5a3c80",
+      "skillLabel": "ICT network security risks"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/0464b062-cea6-4164-b10d-956c61956ae7",
+      "occupationLabel": "ICT security administrator",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/47ca0da1-cae5-4395-ae6b-fd97b9ff48d3",
+      "skillLabel": "system backup best practice"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/0464b062-cea6-4164-b10d-956c61956ae7",
+      "occupationLabel": "ICT security administrator",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/5063a99f-975b-4a7c-85e3-69ecb375b4d3",
+      "skillLabel": "internet governance"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/0464b062-cea6-4164-b10d-956c61956ae7",
+      "occupationLabel": "ICT security administrator",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/5898d99a-62a4-4e10-a2e3-0d815ce44248",
+      "skillLabel": "cyber attack counter-measures"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/0464b062-cea6-4164-b10d-956c61956ae7",
+      "occupationLabel": "ICT security administrator",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/6f1edc19-191f-4ba5-a048-ee69aff05bab",
+      "skillLabel": "security engineering"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/0464b062-cea6-4164-b10d-956c61956ae7",
+      "occupationLabel": "ICT security administrator",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/79f24a62-7718-46e1-9b41-37be0560a5ca",
+      "skillLabel": "organisational resilience"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/0464b062-cea6-4164-b10d-956c61956ae7",
+      "occupationLabel": "ICT security administrator",
+      "relationType": "optional",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/118a9b27-1c5a-4214-b685-1a4d9e6365ea",
+      "skillLabel": "computer forensics"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/0464b062-cea6-4164-b10d-956c61956ae7",
+      "occupationLabel": "ICT security administrator",
+      "relationType": "optional",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/11eebd42-44ab-401d-8a2c-bdb9fc9beb50",
+      "skillLabel": "information security strategy"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/0464b062-cea6-4164-b10d-956c61956ae7",
+      "occupationLabel": "ICT security administrator",
+      "relationType": "optional",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/1c2978b8-bb0d-4249-9c23-877571a4dffa",
+      "skillLabel": "cloud security and compliance"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/04ba4d6c-957d-417f-bf63-5b9e015a9f86",
+      "occupationLabel": "software analyst",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/0ee94c0a-3716-494a-95a2-dcbab9e58be2",
+      "skillLabel": "business requirements techniques"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/04ba4d6c-957d-417f-bf63-5b9e015a9f86",
+      "occupationLabel": "software analyst",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/2450c3b3-e78e-435b-b84d-e05d984e71dc",
+      "skillLabel": "software architecture models"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/04ba4d6c-957d-417f-bf63-5b9e015a9f86",
+      "occupationLabel": "software analyst",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/8ff015a0-98ea-4d80-a23e-1f68110a919e",
+      "skillLabel": "software design methodologies"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/04ba4d6c-957d-417f-bf63-5b9e015a9f86",
+      "occupationLabel": "software analyst",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/a846cb9e-c152-41e7-bd34-45e7ff941e3b",
+      "skillLabel": "legal requirements of ICT products"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/04ba4d6c-957d-417f-bf63-5b9e015a9f86",
+      "occupationLabel": "software analyst",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/ca73ac82-867a-4afa-9732-834aebe896ff",
+      "skillLabel": "ICT system user requirements"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/04ba4d6c-957d-417f-bf63-5b9e015a9f86",
+      "occupationLabel": "software analyst",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/fecf8a0d-62c4-4e71-9b03-0f4fc2ad7bf5",
+      "skillLabel": "data models"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/04ba4d6c-957d-417f-bf63-5b9e015a9f86",
+      "occupationLabel": "software analyst",
+      "relationType": "essential",
+      "skillType": "skill/competence",
+      "skillUri": "http://data.europa.eu/esco/skill/2d6d4784-0992-48e7-b100-22d7229b3f0a",
+      "skillLabel": "translate requirements into visual design"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/04ba4d6c-957d-417f-bf63-5b9e015a9f86",
+      "occupationLabel": "software analyst",
+      "relationType": "essential",
+      "skillType": "skill/competence",
+      "skillUri": "http://data.europa.eu/esco/skill/3bddfd7c-ab6d-40c2-883d-5e97fb7640ba",
+      "skillLabel": "create software design"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/04ba4d6c-957d-417f-bf63-5b9e015a9f86",
+      "occupationLabel": "software analyst",
+      "relationType": "optional",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/000f1d3d-220f-4789-9c0a-cc742521fb02",
+      "skillLabel": "Haskell"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/04ba4d6c-957d-417f-bf63-5b9e015a9f86",
+      "occupationLabel": "software analyst",
+      "relationType": "optional",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/00c04e40-35ea-4ed1-824c-82f936c8f876",
+      "skillLabel": "incremental development"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/04ba4d6c-957d-417f-bf63-5b9e015a9f86",
+      "occupationLabel": "software analyst",
+      "relationType": "optional",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/034c29fa-c3ba-45ea-b8f3-bf8e3705e386",
+      "skillLabel": "Erlang"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/258e46f9-0075-4a2e-adae-1ff0477e0f30",
+      "occupationLabel": "data scientist",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/0760bfac-9a03-427a-ad84-ccd33a2f2ae8",
+      "skillLabel": "mathematical modelling"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/258e46f9-0075-4a2e-adae-1ff0477e0f30",
+      "occupationLabel": "data scientist",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/25f0ea33-b4a2-4f31-b7b4-7d20e827b180",
+      "skillLabel": "data mining"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/258e46f9-0075-4a2e-adae-1ff0477e0f30",
+      "occupationLabel": "data scientist",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/348b74cd-49ce-4844-8bdf-ec188b497213",
+      "skillLabel": "visual presentation techniques"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/258e46f9-0075-4a2e-adae-1ff0477e0f30",
+      "occupationLabel": "data scientist",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/48db96bf-3314-45c6-bad8-fdb6e20e5639",
+      "skillLabel": "data engineering"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/258e46f9-0075-4a2e-adae-1ff0477e0f30",
+      "occupationLabel": "data scientist",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/6360a934-cc87-4954-9656-b32db20592e3",
+      "skillLabel": "quantitative analysis"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/258e46f9-0075-4a2e-adae-1ff0477e0f30",
+      "occupationLabel": "data scientist",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/65e58886-bd1e-4c5b-8ca5-8d9b353c8aa1",
+      "skillLabel": "data visualisation software"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/258e46f9-0075-4a2e-adae-1ff0477e0f30",
+      "occupationLabel": "data scientist",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/68ef0e4d-5542-4e64-84f4-752cce5a3c22",
+      "skillLabel": "statistical modeling techniques"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/258e46f9-0075-4a2e-adae-1ff0477e0f30",
+      "occupationLabel": "data scientist",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/696e3b5b-8b61-45af-ae4c-3ab700f197ec",
+      "skillLabel": "information extraction"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/258e46f9-0075-4a2e-adae-1ff0477e0f30",
+      "occupationLabel": "data scientist",
+      "relationType": "optional",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/0823ccef-813f-4f22-afef-ac0d68615e8f",
+      "skillLabel": "computer simulation"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/258e46f9-0075-4a2e-adae-1ff0477e0f30",
+      "occupationLabel": "data scientist",
+      "relationType": "optional",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/11c56452-fcec-4b00-9695-cca4728e5048",
+      "skillLabel": "marketing analytics"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/258e46f9-0075-4a2e-adae-1ff0477e0f30",
+      "occupationLabel": "data scientist",
+      "relationType": "optional",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/143769cb-b61e-47d8-a61e-eedfbec1016c",
+      "skillLabel": "business intelligence"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/c40a2919-48a9-40ea-b506-1f34f693496d",
+      "occupationLabel": "web developer",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/071233c4-ad2b-4f50-b79f-768d2231163e",
+      "skillLabel": "domain name service"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/c40a2919-48a9-40ea-b506-1f34f693496d",
+      "occupationLabel": "web developer",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/21d2f96d-35f7-4e3f-9745-c533d2dd6e97",
+      "skillLabel": "computer programming"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/c40a2919-48a9-40ea-b506-1f34f693496d",
+      "occupationLabel": "web developer",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/6014921e-1d25-4039-adc2-04852d61880e",
+      "skillLabel": "ICT debugging tools"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/c40a2919-48a9-40ea-b506-1f34f693496d",
+      "occupationLabel": "web developer",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/69bbd53f-fbb0-4476-b4b2-ef7844464e28",
+      "skillLabel": "web programming"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/c40a2919-48a9-40ea-b506-1f34f693496d",
+      "occupationLabel": "web developer",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/8696aff0-18c0-4ba6-a4d0-9a21861b3e5e",
+      "skillLabel": "World Wide Web Consortium standards"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/c40a2919-48a9-40ea-b506-1f34f693496d",
+      "occupationLabel": "web developer",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/925463a7-d51f-4d5b-9f79-4d28cf30acde",
+      "skillLabel": "integrated development environment software"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/c40a2919-48a9-40ea-b506-1f34f693496d",
+      "occupationLabel": "web developer",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/93e65de1-923c-437e-aa5b-e6002967ce71",
+      "skillLabel": "web based collaborative platforms"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/c40a2919-48a9-40ea-b506-1f34f693496d",
+      "occupationLabel": "web developer",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/9d2e926f-53d9-41f5-98f3-19dfaa687f3f",
+      "skillLabel": "tools for software configuration management"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/c40a2919-48a9-40ea-b506-1f34f693496d",
+      "occupationLabel": "web developer",
+      "relationType": "optional",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/000f1d3d-220f-4789-9c0a-cc742521fb02",
+      "skillLabel": "Haskell"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/c40a2919-48a9-40ea-b506-1f34f693496d",
+      "occupationLabel": "web developer",
+      "relationType": "optional",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/013441c1-1f13-47e9-80c4-9a53e8e1bc05",
+      "skillLabel": "KDevelop"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/c40a2919-48a9-40ea-b506-1f34f693496d",
+      "occupationLabel": "web developer",
+      "relationType": "optional",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/034c29fa-c3ba-45ea-b8f3-bf8e3705e386",
+      "skillLabel": "Erlang"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/d3edb8f8-3a06-47a0-8fb9-9b212c006aa2",
+      "occupationLabel": "data analyst",
+      "relationType": "essential",
+      "skillUri": "http://data.europa.eu/esco/skill/629685b8-5f9e-4522-8cff-b3e2c4ec625a",
+      "skillLabel": "digital data processing"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/d3edb8f8-3a06-47a0-8fb9-9b212c006aa2",
+      "occupationLabel": "data analyst",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/03ff0d53-573a-47a0-a0ad-1995815a4339",
+      "skillLabel": "information structure"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/d3edb8f8-3a06-47a0-8fb9-9b212c006aa2",
+      "occupationLabel": "data analyst",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/143769cb-b61e-47d8-a61e-eedfbec1016c",
+      "skillLabel": "business intelligence"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/d3edb8f8-3a06-47a0-8fb9-9b212c006aa2",
+      "occupationLabel": "data analyst",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/25f0ea33-b4a2-4f31-b7b4-7d20e827b180",
+      "skillLabel": "data mining"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/d3edb8f8-3a06-47a0-8fb9-9b212c006aa2",
+      "occupationLabel": "data analyst",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/327d15c8-29ff-4ad4-a4fe-6536d777a45f",
+      "skillLabel": "documentation types"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/d3edb8f8-3a06-47a0-8fb9-9b212c006aa2",
+      "occupationLabel": "data analyst",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/348b74cd-49ce-4844-8bdf-ec188b497213",
+      "skillLabel": "visual presentation techniques"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/d3edb8f8-3a06-47a0-8fb9-9b212c006aa2",
+      "occupationLabel": "data analyst",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/48db96bf-3314-45c6-bad8-fdb6e20e5639",
+      "skillLabel": "data engineering"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/d3edb8f8-3a06-47a0-8fb9-9b212c006aa2",
+      "occupationLabel": "data analyst",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/65e58886-bd1e-4c5b-8ca5-8d9b353c8aa1",
+      "skillLabel": "data visualisation software"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/d3edb8f8-3a06-47a0-8fb9-9b212c006aa2",
+      "occupationLabel": "data analyst",
+      "relationType": "optional",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/11c56452-fcec-4b00-9695-cca4728e5048",
+      "skillLabel": "marketing analytics"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/d3edb8f8-3a06-47a0-8fb9-9b212c006aa2",
+      "occupationLabel": "data analyst",
+      "relationType": "optional",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/1605025e-a179-421f-8f35-5b07d182a6b2",
+      "skillLabel": "web analytics"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/d3edb8f8-3a06-47a0-8fb9-9b212c006aa2",
+      "occupationLabel": "data analyst",
+      "relationType": "optional",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/1b7c716e-af95-4cda-a42f-6479c8b139f5",
+      "skillLabel": "MDX"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/f2b15a0e-e65a-438a-affb-29b9d50b77d1",
+      "occupationLabel": "software developer",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/209a5498-3449-4689-8ed9-bd08cab4fd78",
+      "skillLabel": "engineering principles"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/f2b15a0e-e65a-438a-affb-29b9d50b77d1",
+      "occupationLabel": "software developer",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/21d2f96d-35f7-4e3f-9745-c533d2dd6e97",
+      "skillLabel": "computer programming"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/f2b15a0e-e65a-438a-affb-29b9d50b77d1",
+      "occupationLabel": "software developer",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/59ea80e1-463a-4dba-82c6-d0b6d577d532",
+      "skillLabel": "technical drawings"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/f2b15a0e-e65a-438a-affb-29b9d50b77d1",
+      "occupationLabel": "software developer",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/6014921e-1d25-4039-adc2-04852d61880e",
+      "skillLabel": "ICT debugging tools"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/f2b15a0e-e65a-438a-affb-29b9d50b77d1",
+      "occupationLabel": "software developer",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/7111b95d-0ce3-441a-9d92-4c75d05c4388",
+      "skillLabel": "project management"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/f2b15a0e-e65a-438a-affb-29b9d50b77d1",
+      "occupationLabel": "software developer",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/72a74f69-5cf1-43c5-99b9-62a444578919",
+      "skillLabel": "engineering processes"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/f2b15a0e-e65a-438a-affb-29b9d50b77d1",
+      "occupationLabel": "software developer",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/925463a7-d51f-4d5b-9f79-4d28cf30acde",
+      "skillLabel": "integrated development environment software"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/f2b15a0e-e65a-438a-affb-29b9d50b77d1",
+      "occupationLabel": "software developer",
+      "relationType": "essential",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/9d2e926f-53d9-41f5-98f3-19dfaa687f3f",
+      "skillLabel": "tools for software configuration management"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/f2b15a0e-e65a-438a-affb-29b9d50b77d1",
+      "occupationLabel": "software developer",
+      "relationType": "optional",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/000f1d3d-220f-4789-9c0a-cc742521fb02",
+      "skillLabel": "Haskell"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/f2b15a0e-e65a-438a-affb-29b9d50b77d1",
+      "occupationLabel": "software developer",
+      "relationType": "optional",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/013441c1-1f13-47e9-80c4-9a53e8e1bc05",
+      "skillLabel": "KDevelop"
+    },
+    {
+      "occupationUri": "http://data.europa.eu/esco/occupation/f2b15a0e-e65a-438a-affb-29b9d50b77d1",
+      "occupationLabel": "software developer",
+      "relationType": "optional",
+      "skillType": "knowledge",
+      "skillUri": "http://data.europa.eu/esco/skill/034c29fa-c3ba-45ea-b8f3-bf8e3705e386",
+      "skillLabel": "Erlang"
+    }
+  ],
+  "broader_occ": [
+    {
+      "conceptType": "Occupation",
+      "conceptUri": "http://data.europa.eu/esco/occupation/0464b062-cea6-4164-b10d-956c61956ae7",
+      "conceptLabel": "ICT security administrator",
+      "broaderType": "ISCOGroup",
+      "broaderUri": "http://data.europa.eu/esco/isco/C2529",
+      "broaderLabel": "Database and network professionals not elsewhere classified"
+    },
+    {
+      "conceptType": "Occupation",
+      "conceptUri": "http://data.europa.eu/esco/occupation/04ba4d6c-957d-417f-bf63-5b9e015a9f86",
+      "conceptLabel": "software analyst",
+      "broaderType": "ISCOGroup",
+      "broaderUri": "http://data.europa.eu/esco/isco/C2512",
+      "broaderLabel": "Software developers"
+    },
+    {
+      "conceptType": "Occupation",
+      "conceptUri": "http://data.europa.eu/esco/occupation/258e46f9-0075-4a2e-adae-1ff0477e0f30",
+      "conceptLabel": "data scientist",
+      "broaderType": "ISCOGroup",
+      "broaderUri": "http://data.europa.eu/esco/isco/C2511",
+      "broaderLabel": "Systems analysts"
+    },
+    {
+      "conceptType": "Occupation",
+      "conceptUri": "http://data.europa.eu/esco/occupation/c40a2919-48a9-40ea-b506-1f34f693496d",
+      "conceptLabel": "web developer",
+      "broaderType": "ISCOGroup",
+      "broaderUri": "http://data.europa.eu/esco/isco/C2513",
+      "broaderLabel": "Web and multimedia developers"
+    },
+    {
+      "conceptType": "Occupation",
+      "conceptUri": "http://data.europa.eu/esco/occupation/d3edb8f8-3a06-47a0-8fb9-9b212c006aa2",
+      "conceptLabel": "data analyst",
+      "broaderType": "ISCOGroup",
+      "broaderUri": "http://data.europa.eu/esco/isco/C2511",
+      "broaderLabel": "Systems analysts"
+    },
+    {
+      "conceptType": "Occupation",
+      "conceptUri": "http://data.europa.eu/esco/occupation/f2b15a0e-e65a-438a-affb-29b9d50b77d1",
+      "conceptLabel": "software developer",
+      "broaderType": "ISCOGroup",
+      "broaderUri": "http://data.europa.eu/esco/isco/C2512",
+      "broaderLabel": "Software developers"
+    }
+  ],
+  "broader_skill": []
+}
