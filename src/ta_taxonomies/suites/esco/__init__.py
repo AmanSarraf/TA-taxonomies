@@ -1,7 +1,15 @@
-"""ESCO suite (EU occupations, skills, qualifications).
+"""ESCO suite package: EU occupations, skills, and related graph ops.
 
-Notes from the team's Sprint 1 slice: aligns to ISCO-08 (keep codes as
-strings — leading zeros); `description` is populated, `definition` mostly
-isn't; edges are structurally binary (essential/optional — any weighting is
-our declared policy, not source data). Skeleton.
+Use case: one place for the ESCO taxonomy in Talent Angels — load the graph
+(``load`` module) and query it (``EscoSuite`` in tools). Public export is
+``EscoSuite`` for TA-agents and scripts.
+
+Domain notes: aligns to ISCO-08 (codes as strings, leading zeros); prefer
+``description`` over mostly empty ``definition``; occ↔skill edges are
+essential/optional (any numeric ranking is a declared TA policy, not source
+data). See NOTES.md for Docker/Aura repro.
 """
+
+from ta_taxonomies.suites.esco.tools import EscoSuite
+
+__all__ = ["EscoSuite"]
